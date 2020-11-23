@@ -3,14 +3,14 @@ const router = express.Router()
 
 const EmployeeTest = require('../../models/EmployeeTest')
 
-//@route    GET api/employeetests
-//@desc     Get All EmployeeTests In EmployeeTest
+//@route    GET api/employeeTests
+//@desc     Get All employeeTests In EmployeeTest
 router.get('/', (req, res) => {
     EmployeeTest.find()
-        .then(employeetests => res.json(employeetests) )
+        .then(employeeTests => res.json(employeeTests) )
 })
 
-//@route    POST api/employeetests
+//@route    POST api/employeeTests
 //@desc     Add an employeetest to EmployeeTest
 router.post('/', (req, res) => {
     const newEmployeeTest = new EmployeeTest({
@@ -22,8 +22,8 @@ router.post('/', (req, res) => {
     newEmployeeTest.save().then(employeetest => res.json(employeetest))
 });
 
-//@route    Delete api/employeetests/id
-//@desc     Delete an employeetest from EmployeeTest
+//@route    Delete api/employeeTests/id
+//@desc     Delete an employeeTest from EmployeeTest
 router.delete('/:id', (req, res) => {
     EmployeeTest.findById(req.params.id)
         .then(employeetest => employeetest.remove().then(() => res.json({success : true})))
