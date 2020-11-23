@@ -5,7 +5,8 @@ const PoolSchema = new Schema({
     poolBarcode: {
         type: String,
         maxlength: 50,
-        required: true
+        required: true,
+        unique: true
     }
 })
 
