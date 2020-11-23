@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const EmployeeTestSchema = new Schema({
-    testBarCode: {
+    testBarcode: {
         type: String,
         maxlength: 50,
         required: true,
