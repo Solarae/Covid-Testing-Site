@@ -17,7 +17,8 @@ const WellTestingSchema = new Schema({
         required: true
     },
     result: {
-        type: String, enum: ['admin', 'guest'] }
+        type: String, 
+        enum: ['inprogress', 'negative', 'positive']
     }
 })
 
