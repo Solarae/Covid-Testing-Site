@@ -21,4 +21,13 @@ class TestCollection extends React.Component {
                 } )
             })
     }
+
+    addNewTest = newTest => {
+        axios.post('/api/employeeTests', newTest).then(res =>
+            {
+                this.setState( {
+                    tests: [res.data, ...this.state.tests]
+                } )
+            })
+    }
 }
