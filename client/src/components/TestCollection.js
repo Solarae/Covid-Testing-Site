@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Spinner, Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup, Input, Button } from 'reactstrap';
+import { Spinner, Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 
 class TestCollection extends React.Component {
     state = {
         employeeID: "",
-        testBarcode = "",
+        testBarcode: "",
         tests: [],
-        isLoading: true
+        isLoading: false
     }
 
     componentDidMount() {
-        getTests();
+       // this.getTests();
     }
 
     getTests = () => {
@@ -54,27 +54,19 @@ class TestCollection extends React.Component {
                 <Row className="row justify-content-center">
                     <h1>Test Collection</h1>
                 </Row>
-                <Form onSubmit = {addNewTest}>
+                <Form onSubmit = {this.addNewTest()}>
                     <Row>
                         <FormGroup>
-                            <Col>
-                                <Label>Employee ID:</Label>
-                            </Col>
-                            <Col>
-                                <Input type="text" value = {this.state.employeeID} 
+                            <Label>Employee ID:</Label>
+                            <Input type="text" value = {this.state.employeeID} 
                                     onChange={(e) => this.setState({ employeeID: e.target.value })} />
-                            </Col>
                         </FormGroup>
                     </Row>
                     <Row>
                         <FormGroup>
-                            <Col>
-                                <Label>Test Barcode:</Label>
-                            </Col>
-                            <Col>
-                                <Input type="text" value = {this.state.testBarcode} 
-                                    onChange={(e) => this.setState({ testBarcode: e.target.value })} />
-                            </Col>
+                            <Label>Test Barcode:</Label>
+                            <Input type="text" value = {this.state.testBarcode} 
+                                onChange={(e) => this.setState({ testBarcode: e.target.value })} />
                         </FormGroup>
                     </Row>
                     <Row>
@@ -85,3 +77,5 @@ class TestCollection extends React.Component {
         )
     }
 }
+
+export default TestCollection;
