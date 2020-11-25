@@ -5,7 +5,7 @@ import { Spinner, Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup
 class TestCollection extends React.Component {
     state = {
         tests: [],
-        isLoading: true
+        isLoading: false
     }
 
     componentDidMount() {
@@ -13,6 +13,12 @@ class TestCollection extends React.Component {
     }
 
     getTests = () => {
-        axios.get('/api/')
+        axios.get('/api/employeeTests').then(res =>
+            {
+                this.setState( {
+                    isLoading: true,
+                    tests: res.data
+                } )
+            })
     }
 }
