@@ -22,6 +22,10 @@ const EmployeeSchema = new Schema({
         type: String,
         maxlength: 50,
         required: true,
+    },
+    password: {
+        type :String,
+        required:true,
     }
 })
 
