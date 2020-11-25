@@ -12,38 +12,6 @@ class TestCollection extends React.Component {
         toDelete: []
     }
 
-    componentDidMount() {
-       // this.getTests();
-    }
-
-    getTests = () => {
-        axios.get('/api/employeeTests').then(res =>
-            {
-                this.setState( {
-                    isLoading: false,
-                    tests: res.data
-                } )
-            })
-    }
-
-    addNewTest = newTest => {
-        axios.post('/api/employeeTests', newTest).then(res =>
-            {
-                this.setState( {
-                    tests: [res.data, ...this.state.tests]
-                } )
-            })
-    }
-
-    deleteNewTest = id => {
-        axios.delete(`/api/employeeTests/${id}`).then(res =>
-            {
-                this.setState( {
-                    tests: this.state.tests.filter(test => test._id !== res.data)
-                } )
-            })
-    }
-
     handleCheckClick = (id, e) => {
         if (e.target.checked) {
             this.setState( {

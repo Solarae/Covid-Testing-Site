@@ -19,14 +19,14 @@ router.post('/', (req, res) => {
         collectionTime: req.body.collectionTime,
         collectionBy: req.body.collectionBy
     })
-    newEmployeeTest.save().then(employeetest => res.json(employeetest))
+    newEmployeeTest.save().then(employeeTest => res.json(employeeTest))
 });
 
 //@route    Delete api/employeeTests/id
 //@desc     Delete an employeeTest from EmployeeTest
 router.delete('/:id', (req, res) => {
     EmployeeTest.findById(req.params.id)
-        .then(employeetest => employeetest.remove().then(() => res.json({success : true})))
+        .then(employeeTest => employeeTest.remove().then(() => res.json({success : true})))
         .catch(error => res.status(404).json({success : false}))
 })
 
