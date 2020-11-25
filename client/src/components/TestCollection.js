@@ -6,11 +6,42 @@ class TestCollection extends React.Component {
     state = {
         employeeID: "",
         testBarcode: "",
-        tests: [{_id: 1, employeeID: "Ronnie", testBarcode: "123"},
-        {_id: 2, employeeID: "Singwa", testBarcode: "456"}],
+        tests: [],
         isLoading: false,
         toDelete: []
     }
+
+    componentDidMount() {
+        // this.getTests();
+     }
+ 
+     getTests = () => {
+         axios.get('/api/employeeTests').then(res =>
+             {
+                 this.setState( {
+                     isLoading: false,
+                     tests: res.data
+                 } )
+             })
+     }
+ 
+     addNewTest = newTest => {
+         axios.post('/api/employeeTests', newTest).then(res =>
+             {
+                 this.setState( {
+                     tests: [res.data, ...this.state.tests]
+                 } )
+             })
+     }
+ 
+     deleteTest = id => {
+         axios.delete(`/api/employeeTests/${id}`).then(res =>
+             {
+                 this.setState( {
+                     tests: this.state.tests.filter(test => test._id !== res.data)
+                 } )
+             })
+     }
 
     handleCheckClick = (id, e) => {
         if (e.target.checked) {
@@ -26,13 +57,9 @@ class TestCollection extends React.Component {
     }
 
     deleteClick = () => {
-        var newTests = this.state.tests
-        this.state.toDelete.forEach(del => {
-           newTests = newTests.filter(test => test._id !== del)
+        this.state.toDelete.forEach(test => {
+           this.deleteTest(test)
         })
-        this.setState( {
-            tests: newTests
-        } )
     }
 
     renderTableHeader() {

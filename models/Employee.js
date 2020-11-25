@@ -21,7 +21,7 @@ const EmployeeSchema = new Schema({
     lastName: { 
         type: String,
         maxlength: 50,
-        required: true,
+        required: true
     }
 })
 
