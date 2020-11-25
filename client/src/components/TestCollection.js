@@ -30,4 +30,13 @@ class TestCollection extends React.Component {
                 } )
             })
     }
+
+    deleteNewTest = id => {
+        axios.delete(`/api/employeeTests/${id}`).then(res =>
+            {
+                this.setState( {
+                    tests: this.state.tests.filter(test => test._id !== res.data)
+                } )
+            })
+    }
 }
