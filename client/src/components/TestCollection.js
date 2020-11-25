@@ -77,6 +77,9 @@ class TestCollection extends React.Component {
                             </Col>
                         </FormGroup>
                     </Row>
+                    <Row>
+                        <Button>Find</Button>  
+                    </Row>
                 </Form>
             </Container>
         )
