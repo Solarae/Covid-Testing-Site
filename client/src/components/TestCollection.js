@@ -26,11 +26,13 @@ class TestCollection extends React.Component {
     }
 
     deleteClick = () => {
+        var newTests = this.state.tests
         this.state.toDelete.forEach(del => {
-            this.setState( {
-                tests: this.state.tests.filter(test => test._id !== del)
-            } )
+           newTests = newTests.filter(test => test._id !== del)
         })
+        this.setState( {
+            tests: newTests
+        } )
     }
 
     renderTableHeader() {
@@ -68,7 +70,7 @@ class TestCollection extends React.Component {
                 <Row className="row justify-content-center">
                     <h1>Test Collection</h1>
                 </Row>
-                <Form onSubmit = {this.addNewTest()}>
+                <Form>
                     <Row>
                         <FormGroup>
                             <Label>Employee ID:</Label>
@@ -94,7 +96,7 @@ class TestCollection extends React.Component {
                     </Table>
                 </div>
                 <div className="text-center">
-                    <Button onClick={this.deleteClick()}>
+                    <Button onClick={this.deleteClick}>
                         Delete
                     </Button>
                 </div>
