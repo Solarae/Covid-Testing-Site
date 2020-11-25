@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Spinner, Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Spinner, Container, Row, Col, Table, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 
 class TestCollection extends React.Component {
     state = {
         employeeID: "",
         testBarcode: "",
-        tests: [],
+        tests: [{_id: 1, employeeID: "Ronnie", testBarcode: "123"},
+        {_id: 2, employeeID: "Singwa", testBarcode: "456"}],
         isLoading: false
     }
 
@@ -42,6 +43,24 @@ class TestCollection extends React.Component {
             })
     }
 
+    renderTableHeader() {
+        const header = ["Employee ID", "Test Barcode"]
+        return header.map((hd) => {
+            return <th key={`Header ${hd}`}>{hd}</th>
+        })
+    }
+
+    renderTableData() {
+        return this.state.tests.map(({_id, employeeID, testBarcode}, index) => {
+           return (
+              <tr key={_id}>
+                 <td>{employeeID}</td>
+                 <td>{testBarcode}</td>
+              </tr>
+           )
+        })
+     }
+
     render() {
         if (this.state.isLoading) {
             return <div className="d-flex justify-content-center">
@@ -73,6 +92,12 @@ class TestCollection extends React.Component {
                         <Button>Find</Button>  
                     </Row>
                 </Form>
+                <div>
+                    <Table bordered className="text-center">
+                        <thead><tr>{this.renderTableHeader()}</tr></thead>
+                        <tbody>{this.renderTableData()}</tbody>
+                    </Table>
+                </div>
             </Container>
         )
     }
