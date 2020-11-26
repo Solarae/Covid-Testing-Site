@@ -20,6 +20,7 @@ router.post('/', (req, res) => {
         collectionBy: req.body.collectionBy
     })
     newEmployeeTest.save().then(employeeTest => res.json(employeeTest))
+    .catch(error => res.status(404).json({success : false}))
 });
 
 //@route    Delete api/employeeTests/id

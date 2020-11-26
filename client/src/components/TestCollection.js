@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Spinner, Container, Row, Col, Table, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Spinner, Container, Row, Table, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 
-class TestCollection extends React.Component {
+class TestCollection extends Component {
     state = {
         employeeID: "",
         testBarcode: "",
@@ -25,12 +25,20 @@ class TestCollection extends React.Component {
              })
      }
  
-     addNewTest = newTest => {
+     addTest = () => {
+         const newTest = {
+            testBarcode: this.state.testBarcode,
+            employeeID: this.state.employeeID,
+            collectionTime: Date.now(),
+            collectedBy: "Singwa"
+         }
          axios.post('/api/employeeTests', newTest).then(res =>
              {
-                 this.setState( {
-                     tests: [res.data, ...this.state.tests]
-                 } )
+                 if (res.status !== "404") {
+                    this.setState( {
+                        tests: [res.data, ...this.state.tests]
+                    } )
+                 } 
              })
      }
  
@@ -79,7 +87,7 @@ class TestCollection extends React.Component {
               <tr key={_id}>
                 <td>
                     <FormGroup check>
-                        <Input type="checkbox" defaultChecked = "false" onChange={this.handleCheckClick.bind(this,_id)}/>
+                        <Input type="checkbox" onChange={this.handleCheckClick.bind(this,_id)}/>
                     </FormGroup>
                  </td>
                  <td>{employeeID}</td>
@@ -101,7 +109,7 @@ class TestCollection extends React.Component {
                 <Row className="row justify-content-center">
                     <h1>Test Collection</h1>
                 </Row>
-                <Form>
+                <Form onSubmit = {this.addTest}>
                     <Row>
                         <FormGroup>
                             <Label>Employee ID:</Label>
@@ -117,7 +125,7 @@ class TestCollection extends React.Component {
                         </FormGroup>
                     </Row>
                     <Row>
-                        <Button>Find</Button>  
+                        <Button>Add</Button>  
                     </Row>
                 </Form>
                 <div>
