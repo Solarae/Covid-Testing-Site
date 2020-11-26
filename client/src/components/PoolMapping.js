@@ -1,19 +1,23 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Spinner, Container, Row, Table, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Spinner, Container, ListGroup, ListGroupItem, Row, Table, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 
 class PoolMapping extends Component {
     state = {
+        poolBarcode: "",
         pools: [],
         isLoading: false,
-        toDelete: []
+        selectedPool: null,
+        addToPool: [],
+        deleteFromPool: [],
+        testToAdd: ""
     }
 
     componentDidMount() {
         this.getPools();
      }
  
-     getPools = () => {
+    getPools = () => {
          axios.get('/api/poolMaps').then(res =>
              {
                  this.setState( {
@@ -40,38 +44,75 @@ class PoolMapping extends Component {
              })
      }
  
-    deleteTest = (id, newPools, tempNewPools) => {
-         axios.delete(`/api/poolMaps/${id}`).then(res =>
-             {
-                 if (res.status === "404")
-                    newPools = tempNewPools
-             })
+    deleteTest = (id) => {
+        var oldPools, newPools = this.state.pools
+        const poolIndex = newPools.findIndex(pool => pool._id === this.state.poolBarcode)
+        newPools[poolIndex].testBarcodes = newPools[poolIndex].testBarcodes
+                                        .splice(newPools[poolIndex].testBarcodes.indexOf(id), 1)
+        this.setState( {
+            pools: newPools
+        } )
+        axios.delete(`/api/poolMaps/testBarcode/${id}`).then(res =>
+            {
+                if (res.status === "404") 
+                this.setState( {
+                    pools: oldPools
+                } )
+            })
+
+    }
+
+    deletePool = (id) => {
+        var oldPools = this.state.pools
+        this.setState( {
+            selectedPool: null,
+            pools: this.state.pools.filter(pool => pool._id !== id)
+        } )
+        axios.delete(`/api/poolMaps/pool/${id}`).then(res =>
+            {
+                if (res.status === "404") 
+                this.setState( {
+                    pools: oldPools
+                } )
+            })
      }
 
-    handleCheckClick = (id, e) => {
+    handleCheckClick = (pool, e) => {
         if (e.target.checked) {
             this.setState( {
-                toDelete: [id, ...this.state.toDelete]
+                selectedPool: pool,
+                poolBarcode: pool._id
             } )
         } else {
             this.setState( {
-                toDelete: this.state.toDelete.splice(this.state.toDelete.indexOf(id), 1)
+                selectedPool: null,
+                poolBarcode: 0
             } )
         }
     }
 
-    deleteClick = () => {
-        var newPools = this.state.pools;
-        var tempNewPools;
-        this.state.toDelete.forEach(id => {
-            tempNewPools = newPools;
-            newPools = newPools.filter(pool => pool._id !== id)
-            this.deleteTest(id, newPools, tempNewPools)
+    deletePoolClick = () => {
+        if (this.state.selectedPool !== null)
+            this.deletePool(this.state.selectedPool._id)
+    }
+
+    toDelete = (id) => {
+        var newSelectedPool = this.state.selectedPool
+        newSelectedPool.testBarcodes.splice(newSelectedPool.testBarcodes.indexOf(id),1)
+        this.setState ( {
+            deleteFromPool: [...this.state.deleteFromPool, id],
+            selectedPool : newSelectedPool
         })
-        this.setState( {
-            toDelete: [],
-            pools: newPools
-        } )
+        console.log(newSelectedPool)
+    }
+
+    toAdd = (id) => {
+        var newSelectedPool = this.state.selectedPool
+        newSelectedPool.testBarcodes = [...newSelectedPool.testBarcodes, id ]
+        this.setState ( {
+            addToPool: [id, ...this.state.addToPool],
+            selectedPool: newSelectedPool
+        })
     }
 
     renderTableHeader() {
@@ -82,16 +123,16 @@ class PoolMapping extends Component {
     }
 
     renderTableData() {
-        return this.state.pools.map(({_id, testBarcodes}, index) => {
+        return this.state.pools.map((pool, index) => {
            return (
-              <tr key={_id}>
+              <tr key={pool._id}>
                 <td>
                     <FormGroup check>
-                        <Input type="checkbox" onChange={this.handleCheckClick.bind(this,_id)}/>
+                        <Input type="checkbox" onChange={this.handleCheckClick.bind(this, JSON.parse(JSON.stringify(pool)))}/>
                     </FormGroup>
                  </td>
-                 <td>{_id}</td>
-                 <td>{testBarcodes.join(', ')}</td>
+                 <td>{pool._id}</td>
+                 <td>{pool.testBarcodes.join(', ')}</td>
               </tr>
            )
         })
@@ -112,20 +153,35 @@ class PoolMapping extends Component {
                 <Form onSubmit = {this.addTest}>
                     <Row>
                         <FormGroup>
-                            <Label>Employee ID:</Label>
-                            <Input type="text" value = {this.state.employeeID} 
-                                    onChange={(e) => this.setState({ employeeID: e.target.value })} />
+                            <Label>Pool Barcode:</Label>
+                            <Input type="text" value = {this.state.poolBarcode} 
+                                    onChange={(e) => this.setState({ poolBarcode: e.target.value })} />
                         </FormGroup>
                     </Row>
                     <Row>
-                        <FormGroup>
-                            <Label>Test Barcode:</Label>
-                            <Input type="text" value = {this.state.testBarcode} 
-                                onChange={(e) => this.setState({ testBarcode: e.target.value })} />
-                        </FormGroup>
+                        <Label>Test Barcode:</Label>
                     </Row>
                     <Row>
-                        <Button>Add</Button>  
+                    <ListGroup>
+                            {this.state.selectedPool !== null ? this.state.selectedPool.testBarcodes.map((testBarcode, index) => (
+                        <ListGroupItem key={index}>
+                            {testBarcode}
+                            <Button className="remove-btn" color="danger" size="sm" 
+                                    onClick = {this.toDelete.bind(this, testBarcode)}>&times;</Button>                          
+                        </ListGroupItem>
+                    )) : <ListGroupItem key= {null}>Empty</ListGroupItem>}
+                    </ListGroup>
+                    </Row>
+                    <Row>
+                    <FormGroup>
+                        <Label>Test to Add:</Label>
+                            <Input type="text" value = {this.state.testToAdd} 
+                                    onChange={(e) => this.setState({ testToAdd: e.target.value })} />
+                        <Button onClick = {this.toAdd.bind(this, this.state.testToAdd)}>Add Row</Button>
+                    </FormGroup>
+                    </Row>
+                    <Row>
+                        <Button>Submit Pool</Button>  
                     </Row>
                 </Form>
                 <div>
@@ -135,7 +191,7 @@ class PoolMapping extends Component {
                     </Table>
                 </div>
                 <div className="text-center">
-                    <Button onClick={this.deleteClick}>
+                    <Button onClick={this.deletePoolClick}>
                         Delete
                     </Button>
                 </div>

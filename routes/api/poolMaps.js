@@ -7,7 +7,7 @@ const PoolMap = require('../../models/PoolMap')
 //@desc     Get Pools and their associated test barcodes In PoolMap
 router.get('/', (req, res) => {
     PoolMap.aggregate([
-        { $group : { _id : "$poolBarcode", testBarcodes: { $push: "$testBarcode" } } }
+        { $group : { _id : "$poolBarcode",  testBarcodes: { $push: "$testBarcode" } } }
       ]).then(poolMaps => res.json(poolMaps))
 })
 
@@ -23,9 +23,15 @@ router.post('/', (req, res) => {
 
 //@route    Delete api/poolMaps/id
 //@desc     Delete a poolMap from PoolMap
-router.delete('/:id', (req, res) => {
-    PoolMap.deleteMany( { poolBarcode: req.params.id } ).then(() => res.json({success : true}))
+router.delete('/:type/:id', (req, res) => {
+    if (req.params.type === "testBarcode") {
+        PoolMap.findOne( { testBarcode: req.params.id } )
+        .then(poolMap => poolMap.remove().then(() => res.json({success : true})))
         .catch(error => res.status(404).json({success : false}))
+    } else {
+        PoolMap.deleteMany( { poolBarcode: req.params.id } ).then(() => res.json({success : true}))
+        .catch(error => res.status(404).json({success : false}))
+    }
 })
 
 module.exports = router
