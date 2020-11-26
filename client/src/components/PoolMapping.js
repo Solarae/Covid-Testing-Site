@@ -10,7 +10,7 @@ class PoolMapping extends Component {
     }
 
     componentDidMount() {
-        this.getTests();
+        this.getPools();
      }
  
      getPools = () => {
@@ -23,7 +23,7 @@ class PoolMapping extends Component {
              })
      }
  
-     addTest = () => {
+    addTest = () => {
          const newTest = {
             testBarcode: this.state.testBarcode,
             employeeID: this.state.employeeID,
@@ -40,7 +40,7 @@ class PoolMapping extends Component {
              })
      }
  
-     deleteTest = (id, newTests) => {
+    deleteTest = (id, newTests) => {
          axios.delete(`/api/employeeTests/${id}`).then(res =>
              {
                  if (res.status === "404")
@@ -80,7 +80,7 @@ class PoolMapping extends Component {
     }
 
     renderTableData() {
-        return this.state.tests.map(({_id, employeeID, testBarcode}, index) => {
+        return this.state.pools.map(({_id, testBarcodes}, index) => {
            return (
               <tr key={_id}>
                 <td>
@@ -88,8 +88,8 @@ class PoolMapping extends Component {
                         <Input type="checkbox" onChange={this.handleCheckClick.bind(this,_id)}/>
                     </FormGroup>
                  </td>
-                 <td>{employeeID}</td>
-                 <td>{testBarcode}</td>
+                 <td>{_id}</td>
+                 <td>{testBarcodes.join(', ')}</td>
               </tr>
            )
         })
