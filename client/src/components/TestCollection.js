@@ -42,7 +42,7 @@ class TestCollection extends Component {
              })
      }
  
-     deleteTest = (id, newTests) => {
+     deleteTest = (id, newTests, tempNewTests) => {
          axios.delete(`/api/employeeTests/${id}`).then(res =>
              {
                  if (res.status === "404")

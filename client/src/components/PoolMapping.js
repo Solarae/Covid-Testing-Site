@@ -30,7 +30,7 @@ class PoolMapping extends Component {
             collectionTime: Date.now(),
             collectedBy: "Singwa"
          }
-         axios.post('/api/employeeTests', newTest).then(res =>
+         axios.post('/api/poolMaps', newTest).then(res =>
              {
                  if (res.status !== "404") {
                     this.setState( {
@@ -41,7 +41,7 @@ class PoolMapping extends Component {
      }
  
     deleteTest = (id, newPools, tempNewPools) => {
-         axios.delete(`/api/employeeTests/${id}`).then(res =>
+         axios.delete(`/api/poolMaps/${id}`).then(res =>
              {
                  if (res.status === "404")
                     newPools = tempNewPools
