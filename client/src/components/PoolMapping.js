@@ -40,11 +40,11 @@ class PoolMapping extends Component {
              })
      }
  
-    deleteTest = (id, newTests) => {
+    deleteTest = (id, newPools, tempNewPools) => {
          axios.delete(`/api/employeeTests/${id}`).then(res =>
              {
                  if (res.status === "404")
-                    newTests =   [id, ...newTests]
+                    newPools = tempNewPools
              })
      }
 
@@ -62,9 +62,11 @@ class PoolMapping extends Component {
 
     deleteClick = () => {
         var newPools = this.state.pools;
+        var tempNewPools;
         this.state.toDelete.forEach(id => {
+            tempNewPools = newPools;
             newPools = newPools.filter(pool => pool._id !== id)
-            this.deleteTest(id, newTests)
+            this.deleteTest(id, newPools, tempNewPools)
         })
         this.setState( {
             toDelete: [],

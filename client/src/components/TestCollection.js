@@ -46,7 +46,7 @@ class TestCollection extends Component {
          axios.delete(`/api/employeeTests/${id}`).then(res =>
              {
                  if (res.status === "404")
-                    newTests =   [id, ...newTests]
+                    newTests = tempNewTests
              })
      }
 
@@ -64,9 +64,11 @@ class TestCollection extends Component {
 
     deleteClick = () => {
         var newTests = this.state.tests;
+        var tempNewTests
         this.state.toDelete.forEach(id => {
+            tempNewTests = newTests
             newTests = newTests.filter(test => test._id !== id)
-            this.deleteTest(id, newTests)
+            this.deleteTest(id, newTests, tempNewTests)
         })
         this.setState( {
             toDelete: [],
