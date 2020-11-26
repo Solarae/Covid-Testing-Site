@@ -61,14 +61,14 @@ class PoolMapping extends Component {
     }
 
     deleteClick = () => {
-        var newTests = this.state.tests;
+        var newPools = this.state.pools;
         this.state.toDelete.forEach(id => {
-            newTests = newTests.filter(test => test._id !== id)
+            newPools = newPools.filter(pool => pool._id !== id)
             this.deleteTest(id, newTests)
         })
         this.setState( {
             toDelete: [],
-            tests: newTests
+            pools: newPools
         } )
     }
 

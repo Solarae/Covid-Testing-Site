@@ -24,8 +24,7 @@ router.post('/', (req, res) => {
 //@route    Delete api/poolMaps/id
 //@desc     Delete a poolMap from PoolMap
 router.delete('/:id', (req, res) => {
-    PoolMap.findById(req.params.id)
-        .then(poolMap => poolMap.remove().then(() => res.json({success : true})))
+    PoolMap.remove( { poolBarcode: req.params.id } ).then(() => res.json({success : true}))
         .catch(error => res.status(404).json({success : false}))
 })
 
