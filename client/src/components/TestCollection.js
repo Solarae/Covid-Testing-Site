@@ -12,7 +12,7 @@ class TestCollection extends React.Component {
     }
 
     componentDidMount() {
-        // this.getTests();
+        this.getTests();
      }
  
      getTests = () => {
@@ -34,12 +34,11 @@ class TestCollection extends React.Component {
              })
      }
  
-     deleteTest = id => {
+     deleteTest = (id, newTests) => {
          axios.delete(`/api/employeeTests/${id}`).then(res =>
              {
-                 this.setState( {
-                     tests: this.state.tests.filter(test => test._id !== res.data)
-                 } )
+                 if (res.status === "404")
+                    newTests =   [id, ...newTests]
              })
      }
 
@@ -53,13 +52,18 @@ class TestCollection extends React.Component {
                 toDelete: this.state.toDelete.splice(this.state.toDelete.indexOf(id), 1)
             } )
         }
-        
     }
 
     deleteClick = () => {
-        this.state.toDelete.forEach(test => {
-           this.deleteTest(test)
+        var newTests = this.state.tests;
+        this.state.toDelete.forEach(id => {
+            newTests = newTests.filter(test => test._id !== id)
+            this.deleteTest(id, newTests)
         })
+        this.setState( {
+            toDelete: [],
+            tests: newTests
+        } )
     }
 
     renderTableHeader() {

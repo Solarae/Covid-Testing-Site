@@ -20,7 +20,7 @@ const EmployeeTestSchema = new Schema({
     collectedBy: { 
         type: String,
         maxlength: 20,
-        required: true
+        required: false
     }
 })
 
