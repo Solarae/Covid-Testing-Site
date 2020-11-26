@@ -20,8 +20,8 @@ const EmployeeTestSchema = new Schema({
     collectedBy: { 
         type: String,
         maxlength: 20,
-        required: true,
+        required: false
     }
 })
 
-module.exports = EmployeeTest = mongoose.model('employeetest', EmployeeTestSchema)
+module.exports = EmployeeTest = mongoose.model('employeeTest', EmployeeTestSchema)
