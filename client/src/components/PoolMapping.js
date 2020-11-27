@@ -51,7 +51,7 @@ class PoolMapping extends Component {
             poolBarcode: this.state.poolBarcode,
             testBarcodes: this.state.selectedPool.testBarcodes
          }
-        axios.post('/api/poolMaps/', addPool).then(res =>
+        axios.post('/api/poolMaps/', newPool).then(res =>
             {
                 this.setState( {
                     pools: [...this.state.pools, res.data]
