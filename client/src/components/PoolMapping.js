@@ -28,7 +28,7 @@ class PoolMapping extends Component {
  
     submitPool = (e) => {
         e.preventDefault()
-        if (this.state.find(pool => pool.poolBarcode === this.state.poolBarcode) !== undefined) {
+        if (this.state.pools.find(pool => pool.poolBarcode === this.state.poolBarcode) !== undefined) {
             this.updatePool()
         } else {
             this.addPool()
@@ -38,9 +38,9 @@ class PoolMapping extends Component {
     updatePool = () => {
         var newPools = JSON.parse(JSON.stringify(this.state.pools))
         newPools.find((pool) => pool._id === this.state.selectedPool._id)
-                .testBarcodes = this.state.selectedPool.testBarcodes
+                .testBarcodes = this.state.poolTestBarcodes
         axios.patch(`/api/poolMaps/${this.state.selectedPool._id}`, 
-                { testBarcodes: this.state.selectedPool.testBarcodes } )
+                { testBarcodes: this.state.poolTestBarcodes } )
                     .then(res => { 
                         this.setState( { pools: newPools } )
                     })
@@ -49,7 +49,7 @@ class PoolMapping extends Component {
     addPool = () => {
         const newPool = {
             poolBarcode: this.state.poolBarcode,
-            testBarcodes: this.state.selectedPool.testBarcodes
+            testBarcodes: this.state.poolTestBarcodes
          }
         axios.post('/api/poolMaps/', newPool).then(res =>
             {
