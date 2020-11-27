@@ -86,11 +86,10 @@ class PoolMapping extends Component {
         })
     }
 
-    toAdd = (id) => {
-        var newSelectedPool = this.state.selectedPool
-        newSelectedPool.testBarcodes = [...newSelectedPool.testBarcodes, id ]
+    toAdd = (testBarcode) => {
+        var newSelectedPool = JSON.parse(JSON.stringify(this.state.selectedPool))
+        newSelectedPool.testBarcodes = [...newSelectedPool.testBarcodes, testBarcode]
         this.setState ( {
-            addToPool: [id, ...this.state.addToPool],
             selectedPool: newSelectedPool
         })
     }
