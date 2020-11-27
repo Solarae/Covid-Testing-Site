@@ -17,14 +17,14 @@ router.post('/', (req, res) => {
         labID: req.body.labID,
         password: req.body.password
     })
-    newLabEmployee.save().then(labemployee => res.json(labemployee))
+    newLabEmployee.save().then(labEmployee => res.json(labEmployee))
 });
 
 //@route    Delete api/labEmployees/id
 //@desc     Delete a labEmployee from LabEmployee
 router.delete('/:id', (req, res) => {
     LabEmployee.findById(req.params.id)
-        .then(labemployee => labemployee.remove().then(() => res.json({success : true})))
+        .then(labEmployee => labEmployee.remove().then(() => res.json({success : true})))
         .catch(error => res.status(404).json({success : false}))
 })
 

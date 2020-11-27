@@ -1,4 +1,3 @@
-
 import React from 'react';
 import LabLogin from "./components/LabLogin.js"
 import EmployeeLogin from "./components/EmployeeLogin.js"
@@ -12,6 +11,10 @@ import {
   Link
 } from "react-router-dom";
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
+import TestCollection from './components/TestCollection'
+import PoolMapping from './components/PoolMapping'
 
 
 function App() {
@@ -23,9 +26,11 @@ function App() {
           <Route exact path="/labLogin" component={LabLogin}/>
           <Route exact path="/employeeLogin" component={EmployeeLogin}/>
           <Route exact path="/register" component={Register}/>
+          <Route exact path="/poolMapping" component={PoolMapping}/>
         </Switch>
       </Router>
     </>
+
   );
 }
 

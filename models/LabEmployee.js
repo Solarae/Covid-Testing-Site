@@ -14,4 +14,4 @@ const LabEmployeeSchema = new Schema({
     }
 })
 
-module.exports = LabEmployee = mongoose.model('labemployee', LabEmployeeSchema)
+module.exports = LabEmployee = mongoose.model('labEmployee', LabEmployeeSchema)
