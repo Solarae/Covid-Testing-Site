@@ -1,7 +1,10 @@
 
 import React from 'react';
-import Login from "./components/Login.js"
+import LabLogin from "./components/LabLogin.js"
+import EmployeeLogin from "./components/EmployeeLogin.js"
 import Register from "./components/Register.js"
+import Navagation from "./components/Navagation.js"
+import { Button , Form } from 'react-bootstrap'
 import {
   BrowserRouter as Router,
   Switch,
@@ -14,9 +17,11 @@ import {
 function App() {
   return (
     <>
+      <Navagation />
       <Router>
         <Switch>
-          <Route exact path="/" component={Login}/>
+          <Route exact path="/labLogin" component={LabLogin}/>
+          <Route exact path="/employeeLogin" component={EmployeeLogin}/>
           <Route exact path="/register" component={Register}/>
         </Switch>
       </Router>

@@ -28,4 +28,22 @@ router.delete('/:id', (req, res) => {
         .catch(error => res.status(404).json({success : false}))
 })
 
+
+//@route    POST api/employees/login
+//@desc     Logs in a user
+router.post("/login", (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+      if (err) throw err;
+      if (!user) res.send(null);
+      else {
+        req.logIn(user, (err) => {
+          if (err) throw err;
+          res.send(user);
+          console.log(req.user);
+        });
+      }
+    })(req, res, next);
+  });
+
+
 module.exports = router

@@ -8,8 +8,8 @@ passport.serializeUser(function(user, done) {
     done(null, user.email);
 });
     
-passport.deserializeUser(function(id, done) {
-    Employee.findOne(id, function (err, user) {
+passport.deserializeUser(function(email, done) {
+    Employee.findOne({email:email}, function (err, user) {
         done(err, user);
     });
 });
@@ -25,23 +25,33 @@ passport.deserializeUser(function(id, done) {
 
 passport.use(new LocalStrategy(
     {usernameField:"email", passwordField:"password"},
-    function(email, password, done) {
+    async function(email, password, done) {
 
 
         console.log("got email "+email + " got pw "+password)
 
-        Employee.findOne({ email: email }, function (err, user) {
+        let user = await Employee.findOne({ email: email });
 
-            console.log("user" +user);
-            
-            if (err)  return done(err);
-            if (!user) return done(null, false); 
-            if (user.password !=password)  return done(null, false);
-            
-            
-            console.log("password match")
-            return done(null, user);
-        });
+
+        if(user){
+            if(user.password != password) return done(null,false);
+
+            console.log("password match for employee")
+            return done(null,user);
+        }
+
+        else{
+            let user = await LabEmployee.findOne({email:email});
+
+            if(user){
+                if(user.password != password) return done(null,false);
+    
+                console.log("password match for lab employee")
+                return done(null,user);
+            }
+
+
+        }
     }
 ));
 

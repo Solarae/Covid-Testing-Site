@@ -17,7 +17,7 @@ router.post('/', (req, res) => {
         testBarcode: req.body.testBarcode,
         employeeID: req.body.employeeID,
         collectionTime: req.body.collectionTime,
-        collectionBy: req.body.collectionBy
+        collectedBy: req.body.collectedBy
     })
     newEmployeeTest.save().then(employeetest => res.json(employeetest))
 });
