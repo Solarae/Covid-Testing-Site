@@ -28,4 +28,8 @@ router.delete('/:id', (req, res) => {
         .catch(error => res.status(404).json({success : false}))
 })
 
+router.patch('/:id', (req, res) => {
+    PoolMap.updateOne({ _id: req.params.id }, {$set: req.body} )
+        .then(poolMap => res.json(poolMap))
+})
 module.exports = router

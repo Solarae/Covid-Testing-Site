@@ -25,39 +25,14 @@ class PoolMapping extends Component {
              })
      }
  
-    addTest = () => {
-         const newTest = {
-            testBarcode: this.state.testBarcode,
-            employeeID: this.state.employeeID,
-            collectionTime: Date.now(),
-            collectedBy: "Singwa"
-         }
-         axios.post('/api/poolMaps', newTest).then(res =>
-             {
-                 if (res.status !== "404") {
-                    this.setState( {
-                        tests: [res.data, ...this.state.tests]
-                    } )
-                 } 
-             })
-     }
- 
-    deleteTest = (id) => {
-        var oldPools, newPools = this.state.pools
-        const poolIndex = newPools.findIndex(pool => pool._id === this.state.poolBarcode)
-        newPools[poolIndex].testBarcodes = newPools[poolIndex].testBarcodes
-                                        .splice(newPools[poolIndex].testBarcodes.indexOf(id), 1)
-        this.setState( {
-            pools: newPools
-        } )
-        axios.delete(`/api/poolMaps/testBarcode/${id}`).then(res =>
-            {
-                if (res.status === "404") 
-                this.setState( {
-                    pools: oldPools
-                } )
-            })
-
+    updatePool = (id) => {
+        var newSelectedPool = JSON.parse(JSON.stringify(this.state.selectedPool))
+        newSelectedPool[newSelectedPool.indexOf(this.state.selectedPool._id)].testBarcodes =
+                this.state.newSelectedPool.testBarcodes
+        axios.patch(`/api/poolMaps/${id}`, { data: { testBarcodes: this.state.selectedPool.testBarcodes}})
+                .then(res =>
+                    { this.setState( { pools: newSelectedPool } )
+                })
     }
 
     deletePool = (id) => {
@@ -132,7 +107,7 @@ class PoolMapping extends Component {
                 <Row className="row justify-content-center">
                     <h1>PoolMapping</h1>
                 </Row>
-                <Form onSubmit = {this.addTest}>
+                <Form onSubmit = {() => this.updatePool(this.state.selectedPool._id)}>
                     <Row>
                         <FormGroup>
                             <Label>Pool Barcode:</Label>
