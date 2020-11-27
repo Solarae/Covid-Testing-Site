@@ -25,16 +25,16 @@ class PoolMapping extends Component {
              })
      }
  
-    updatePool = (e, id) => {
+    submitPool = (e) => {
         e.preventDefault()
         var newPools = JSON.parse(JSON.stringify(this.state.pools))
         newPools.find((pool) => pool._id === this.state.selectedPool._id)
                 .testBarcodes = this.state.selectedPool.testBarcodes
-        axios.patch(`/api/poolMaps/${id}`, { testBarcodes: this.state.selectedPool.testBarcodes } )
-                .then(res => { 
-                    this.setState( { pools: newPools } )
-                    console.log(res)
-                })
+        axios.patch(`/api/poolMaps/${this.state.selectedPool._id}`, 
+                { testBarcodes: this.state.selectedPool.testBarcodes } )
+                    .then(res => { 
+                        this.setState( { pools: newPools } )
+                    })
     }
 
     deletePool = (id) => {
@@ -109,7 +109,7 @@ class PoolMapping extends Component {
                 <Row className="row justify-content-center">
                     <h1>PoolMapping</h1>
                 </Row>
-                <Form onSubmit = {(e) => this.updatePool(e, this.state.selectedPool._id)}>
+                <Form onSubmit = {(e) => this.submitPool(e)}>
                     <Row>
                         <FormGroup>
                             <Label>Pool Barcode:</Label>
