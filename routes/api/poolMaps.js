@@ -14,8 +14,8 @@ router.get('/', (req, res) => {
 //@desc     Add poolMap to PoolMaps
 router.post('/', (req, res) => {
     const newPoolMap = new PoolMap({
-        testBarcode: req.body.testBarcode,
-        poolBarcode: req.body.poolBarcode
+        poolBarcode: req.body.poolBarcode,
+        testBarcodes: req.body.testBarcodes,
     })
     newPoolMap.save().then(poolMap => res.json(poolMap))
 });
