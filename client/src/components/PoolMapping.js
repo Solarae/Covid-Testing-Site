@@ -8,8 +8,6 @@ class PoolMapping extends Component {
         pools: [],
         isLoading: false,
         selectedPool: null,
-        addToPool: [],
-        deleteFromPool: [],
         testToAdd: ""
     }
 
@@ -63,16 +61,10 @@ class PoolMapping extends Component {
     }
 
     deletePool = (id) => {
-        var oldPools = this.state.pools
-        this.setState( {
-            selectedPool: null,
-            pools: this.state.pools.filter(pool => pool._id !== id)
-        } )
-        axios.delete(`/api/poolMaps/pool/${id}`).then(res =>
+        axios.delete(`/api/poolMaps/${id}`).then(res =>
             {
-                if (res.status === "404") 
                 this.setState( {
-                    pools: oldPools
+                    pools: this.state.pools.filter(pool => pool._id !== id)
                 } )
             })
      }
@@ -86,14 +78,13 @@ class PoolMapping extends Component {
             this.deletePool(this.state.selectedPool._id)
     }
 
-    toDelete = (id) => {
+    toDelete = (testBarcode) => {
         var newSelectedPool = this.state.selectedPool
-        newSelectedPool.testBarcodes.splice(newSelectedPool.testBarcodes.indexOf(id),1)
+        newSelectedPool.testBarcodes.splice(newSelectedPool.testBarcodes.indexOf(testBarcode),1)
         this.setState ( {
-            deleteFromPool: [...this.state.deleteFromPool, id],
-            selectedPool : newSelectedPool
+            selectedPool : this.state.selectedPool.testBarcodes
+                            .splice(this.state.selectedPool.testBarcodes.indexOf(testBarcode),1)
         })
-        console.log(newSelectedPool)
     }
 
     toAdd = (id) => {
@@ -121,7 +112,7 @@ class PoolMapping extends Component {
                         <Label check>
                             <Input type="radio" checked={this.state.selectedPool !== null && this.state.selectedPool._id === pool._id} 
                                         onChange= {() => this.changeRadio(pool)}/>{' '}
-                            {pool._id}
+                            {pool.poolBarcode}
                         </Label>
                     </FormGroup>
                   </td>
@@ -152,7 +143,7 @@ class PoolMapping extends Component {
                         </FormGroup>
                     </Row>
                     <Row>
-                        <Label>Test Barcode:</Label>
+                        <Label>Test Barcodes:</Label>
                     </Row>
                     <Row>
                     <ListGroup>
