@@ -8,7 +8,8 @@ class PoolMapping extends Component {
         pools: [],
         isLoading: false,
         selectedPool: null,
-        testToAdd: ""
+        testToAdd: "",
+        poolTestBarcodes: []
     }
 
     componentDidMount() {
@@ -27,6 +28,14 @@ class PoolMapping extends Component {
  
     submitPool = (e) => {
         e.preventDefault()
+        if (this.state.find(pool => pool.poolBarcode === this.state.poolBarcode) !== undefined) {
+            this.updatePool()
+        } else {
+            this.addPool()
+        }
+    }
+
+    updatePool = () => {
         var newPools = JSON.parse(JSON.stringify(this.state.pools))
         newPools.find((pool) => pool._id === this.state.selectedPool._id)
                 .testBarcodes = this.state.selectedPool.testBarcodes
@@ -35,6 +44,19 @@ class PoolMapping extends Component {
                     .then(res => { 
                         this.setState( { pools: newPools } )
                     })
+    }
+
+    addPool = () => {
+        const newPool = {
+            poolBarcode: this.state.poolBarcode,
+            testBarcodes: this.state.selectedPool.testBarcodes
+         }
+        axios.post('/api/poolMaps/', addPool).then(res =>
+            {
+                this.setState( {
+                    pools: [...this.state.pools, res.data]
+                } )
+            })
     }
 
     deletePool = (id) => {
@@ -47,7 +69,8 @@ class PoolMapping extends Component {
      }
 
     changeRadio = (pool) => {
-        this.setState( { selectedPool: pool, poolBarcode: pool.poolBarcode } )
+        this.setState( { selectedPool: pool, poolBarcode: pool.poolBarcode, 
+            poolTestBarcodes: pool.testBarcodes } )
     }
 
     deletePoolClick = () => {
@@ -56,18 +79,18 @@ class PoolMapping extends Component {
     }
 
     toDelete = (testBarcode) => {
-        var newSelectedPool = JSON.parse(JSON.stringify(this.state.selectedPool))
-        newSelectedPool.testBarcodes.splice(newSelectedPool.testBarcodes.indexOf(testBarcode),1)
+        var newPoolTestBarcodes = [...this.state.poolTestBarcodes]
+        newPoolTestBarcodes.splice(newPoolTestBarcodes.indexOf(testBarcode),1)
         this.setState ( {
-            selectedPool: newSelectedPool
+            poolTestBarcodes: newPoolTestBarcodes
         })
     }
 
     toAdd = (testBarcode) => {
-        var newSelectedPool = JSON.parse(JSON.stringify(this.state.selectedPool))
-        newSelectedPool.testBarcodes = [...newSelectedPool.testBarcodes, testBarcode]
+        var newPoolTestBarcodes = [...this.state.poolTestBarcodes]
+        newPoolTestBarcodes = [...newPoolTestBarcodes, testBarcode]
         this.setState ( {
-            selectedPool: newSelectedPool
+            poolTestBarcodes: newPoolTestBarcodes
         })
     }
 
@@ -122,13 +145,13 @@ class PoolMapping extends Component {
                     </Row>
                     <Row>
                     <ListGroup>
-                            {this.state.selectedPool !== null ? this.state.selectedPool.testBarcodes.map((testBarcode, index) => (
+                            {this.state.poolTestBarcodes.map((testBarcode, index) => (
                         <ListGroupItem key={index}>
                             {testBarcode}
                             <Button className="remove-btn" color="danger" size="sm" 
                                     onClick = {() => this.toDelete(testBarcode)}>&times;</Button>                          
                         </ListGroupItem>
-                    )) : <ListGroupItem key= {null}>Empty</ListGroupItem>}
+                    ))}
                     </ListGroup>
                     </Row>
                     <Row>
