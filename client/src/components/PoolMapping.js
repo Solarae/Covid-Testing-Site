@@ -25,13 +25,15 @@ class PoolMapping extends Component {
              })
      }
  
-    updatePool = (id) => {
-        var newSelectedPool = JSON.parse(JSON.stringify(this.state.selectedPool))
-        newSelectedPool[newSelectedPool.indexOf(this.state.selectedPool._id)].testBarcodes =
-                this.state.newSelectedPool.testBarcodes
-        axios.patch(`/api/poolMaps/${id}`, { data: { testBarcodes: this.state.selectedPool.testBarcodes}})
-                .then(res =>
-                    { this.setState( { pools: newSelectedPool } )
+    updatePool = (e, id) => {
+        e.preventDefault()
+        var newPools = JSON.parse(JSON.stringify(this.state.pools))
+        newPools.find((pool) => pool._id === this.state.selectedPool._id)
+                .testBarcodes = this.state.selectedPool.testBarcodes
+        axios.patch(`/api/poolMaps/${id}`, { testBarcodes: this.state.selectedPool.testBarcodes } )
+                .then(res => { 
+                    this.setState( { pools: newPools } )
+                    console.log(res)
                 })
     }
 
@@ -45,7 +47,7 @@ class PoolMapping extends Component {
      }
 
     changeRadio = (pool) => {
-        this.setState( { selectedPool: pool } )
+        this.setState( { selectedPool: pool, poolBarcode: pool.poolBarcode } )
     }
 
     deletePoolClick = () => {
@@ -107,7 +109,7 @@ class PoolMapping extends Component {
                 <Row className="row justify-content-center">
                     <h1>PoolMapping</h1>
                 </Row>
-                <Form onSubmit = {() => this.updatePool(this.state.selectedPool._id)}>
+                <Form onSubmit = {(e) => this.updatePool(e, this.state.selectedPool._id)}>
                     <Row>
                         <FormGroup>
                             <Label>Pool Barcode:</Label>
