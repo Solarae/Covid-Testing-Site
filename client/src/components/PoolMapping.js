@@ -77,18 +77,8 @@ class PoolMapping extends Component {
             })
      }
 
-    handleCheckClick = (pool, e) => {
-        if (e.target.checked) {
-            this.setState( {
-                selectedPool: pool,
-                poolBarcode: pool._id
-            } )
-        } else {
-            this.setState( {
-                selectedPool: null,
-                poolBarcode: 0
-            } )
-        }
+    changeRadio = (pool) => {
+        this.setState( { selectedPool: pool } )
     }
 
     deletePoolClick = () => {
@@ -116,24 +106,27 @@ class PoolMapping extends Component {
     }
 
     renderTableHeader() {
-        const header = ["Checkbox", "Pool Barcode", "Test Barcode"]
+        const header = ["Pool Barcode", "Test Barcode"]
         return header.map((hd) => {
             return <th key={`Header ${hd}`}>{hd}</th>
         })
     }
 
     renderTableData() {
-        return this.state.pools.map((pool, index) => {
+        return this.state.pools.map((pool) => {
            return (
               <tr key={pool._id}>
-                <td>
+                  <td>
                     <FormGroup check>
-                        <Input type="checkbox" onChange={this.handleCheckClick.bind(this, JSON.parse(JSON.stringify(pool)))}/>
+                        <Label check>
+                            <Input type="radio" checked={this.state.selectedPool !== null && this.state.selectedPool._id === pool._id} 
+                                        onChange= {() => this.changeRadio(pool)}/>{' '}
+                            {pool._id}
+                        </Label>
                     </FormGroup>
-                 </td>
-                 <td>{pool._id}</td>
-                 <td>{pool.testBarcodes.join(', ')}</td>
-              </tr>
+                  </td>
+                  <td>{pool.testBarcodes.join(', ')}</td>
+                </tr>
            )
         })
      }
@@ -167,7 +160,7 @@ class PoolMapping extends Component {
                         <ListGroupItem key={index}>
                             {testBarcode}
                             <Button className="remove-btn" color="danger" size="sm" 
-                                    onClick = {this.toDelete.bind(this, testBarcode)}>&times;</Button>                          
+                                    onClick = {() => this.toDelete(testBarcode)}>&times;</Button>                          
                         </ListGroupItem>
                     )) : <ListGroupItem key= {null}>Empty</ListGroupItem>}
                     </ListGroup>
@@ -177,7 +170,7 @@ class PoolMapping extends Component {
                         <Label>Test to Add:</Label>
                             <Input type="text" value = {this.state.testToAdd} 
                                     onChange={(e) => this.setState({ testToAdd: e.target.value })} />
-                        <Button onClick = {this.toAdd.bind(this, this.state.testToAdd)}>Add Row</Button>
+                        <Button onClick = {() => this.toAdd(this.state.testToAdd)}>Add Row</Button>
                     </FormGroup>
                     </Row>
                     <Row>
@@ -194,7 +187,7 @@ class PoolMapping extends Component {
                     <Button onClick={this.deletePoolClick}>
                         Delete
                     </Button>
-                </div>
+                </div>    
             </Container>
         )
     }
