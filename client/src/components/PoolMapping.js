@@ -79,11 +79,10 @@ class PoolMapping extends Component {
     }
 
     toDelete = (testBarcode) => {
-        var newSelectedPool = this.state.selectedPool
+        var newSelectedPool = JSON.parse(JSON.stringify(this.state.selectedPool))
         newSelectedPool.testBarcodes.splice(newSelectedPool.testBarcodes.indexOf(testBarcode),1)
         this.setState ( {
-            selectedPool : this.state.selectedPool.testBarcodes
-                            .splice(this.state.selectedPool.testBarcodes.indexOf(testBarcode),1)
+            selectedPool: newSelectedPool
         })
     }
 
