@@ -6,9 +6,8 @@ const PoolMap = require('../../models/PoolMap')
 //@route    GET api/poolMaps
 //@desc     Get Pools and their associated test barcodes In PoolMap
 router.get('/', (req, res) => {
-    PoolMap.aggregate([
-        { $group : { _id : "$poolBarcode",  testBarcodes: { $push: "$testBarcode" } } }
-      ]).then(poolMaps => res.json(poolMaps))
+    PoolMap.find()
+        .then(poolMaps => res.json(poolMaps) )
 })
 
 //@route    POST api/poolMaps
