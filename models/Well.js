@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const Test = require('./Test')
 
 const WellSchema = new Schema({
     wellBarcode: {
@@ -13,10 +14,10 @@ const WellSchema = new Schema({
             maxlength: 50,
             required: true
         },
-        testBarcodes: {
-            type: Array,
-            // REF OBJECT ID
-        }
+        testBarcodes: [{
+            type: Schema.Types.ObjectId, 
+            ref: 'Test'
+          }]
     }, 
     testingStartTime: {
         type: Date,
