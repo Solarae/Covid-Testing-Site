@@ -18,7 +18,7 @@ app.use(express.json())
 app.use('/api/employees', employees)
 app.use('/api/employeeTests', employeeTests)
 app.use('/api/labEmployees', labEmployees)
-app.use('api/tests', tests)
+app.use('/api/tests', tests)
 app.use('/api/wells', wells)
 const PORT =  process.env.PORT || 5000
 

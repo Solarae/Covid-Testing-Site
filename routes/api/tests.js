@@ -19,12 +19,13 @@ router.post('/', (req, res) => {
         employeeID: req.body.employeeID
     })
     newTest.save().then(test => res.json(test))
+        .catch(error => res.status(404).json(newTest))
 });
 
 //@route    Delete api/tests/id
 //@desc     Delete a test from Test
 router.delete('/:id', (req, res) => {
-    Well.findById(req.params.id)
+    Test.findById(req.params.id)
         .then(test => test.remove().then(() => res.json({success : true})))
         .catch(error => res.status(404).json({success : false}))
 })
