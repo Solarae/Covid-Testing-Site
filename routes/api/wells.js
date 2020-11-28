@@ -17,7 +17,7 @@ router.post('/', (req, res) => {
         wellBarcode: req.body.wellBarcode,
         pool: req.body.pool,
         testingStartingTime: req.body.testingStartingTime,
-        result: result.body.result
+        result: req.body.result
     })
     newWell.save().then(well => res.json(well))
 });
