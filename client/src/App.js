@@ -15,6 +15,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import TestCollection from './components/TestCollection'
 import PoolMapping from './components/PoolMapping'
+import EmployeeResult from './components/EmployeeResult.js';
 
 
 function App() {
@@ -27,6 +28,8 @@ function App() {
           <Route exact path="/employeeLogin" component={EmployeeLogin}/>
           <Route exact path="/register" component={Register}/>
           <Route exact path="/poolMapping" component={PoolMapping}/>
+          <Route exact path="/employeeResult" component={EmployeeResult}/>
+          <Route exact path="/testCollection" component={TestCollection}/>
         </Switch>
       </Router>
     </>

@@ -7,12 +7,14 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
+    Link,
+    useHistory
   } from "react-router-dom";
 
 const EmployeeLogin = () =>{
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const history = useHistory();
 
     const handleSubmit = e =>{
         e.preventDefault();
@@ -35,8 +37,11 @@ const EmployeeLogin = () =>{
           })
           .then(function (response) {
             console.log(response);
-            if(response.data)
-              localStorage.setItem('user', response.data)
+            if(response.data){
+              localStorage.setItem('user', response.data);
+              history.push("/employeeResult")
+            }
+              
             else
               console.log("Wrong email or password")
           })

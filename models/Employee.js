@@ -21,11 +21,12 @@ const EmployeeSchema = new Schema({
     lastName: { 
         type: String,
         maxlength: 50,
-        required: true,
+        required: true
     },
     password: {
-        type :String,
-        required:true,
+        type: String,
+        maxlength: 50,
+        required: true
     }
 })
 
