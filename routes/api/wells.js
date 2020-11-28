@@ -14,7 +14,10 @@ router.get('/', (req, res) => {
 //@desc     Add wells to Well
 router.post('/', (req, res) => {
     const newWell = new Well({
-        wellBarcode: req.body.wellBarcode
+        wellBarcode: req.body.wellBarcode,
+        pool: req.body.pool,
+        testingStartingTime: req.body.testingStartingTime,
+        result: result.body.result
     })
     newWell.save().then(well => res.json(well))
 });
