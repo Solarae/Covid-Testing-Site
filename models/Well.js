@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const Test = require('./Test')
 
 const WellSchema = new Schema({
     wellBarcode: {
@@ -7,6 +8,26 @@ const WellSchema = new Schema({
         maxlength: 50,
         required: true,
         unique: true
+    },
+    pool: {
+        poolBarcode: {
+            type: String,
+            maxlength: 50,
+            required: true,
+            unique: true
+        },
+        testBarcodes: [{
+            type: Schema.Types.ObjectId, 
+            ref: Test
+          }]
+    }, 
+    testingStartTime: {
+        type: Date,
+        required: true
+    },
+    result: {
+        type: String, 
+        enum: ['inprogress', 'negative', 'positive']
     }
 })
 
