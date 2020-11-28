@@ -17,7 +17,8 @@ router.post('/', (req, res) => {
         employeeID: req.body.employeeID,
         email: req.body.email,
         firstName: req.body.firstName,
-        lastName: req.body.lastName
+        lastName: req.body.lastName,
+        password: req.body.password
     })
     newEmployee.save().then(employee => res.json(employee))
 });
