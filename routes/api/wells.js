@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 })
 
 //@route    POST api/wells
-//@desc     Add wells to Well
+//@desc     Add well to Well
 router.post('/', (req, res) => {
     const newWell = new Well({
         wellBarcode: req.body.wellBarcode,
