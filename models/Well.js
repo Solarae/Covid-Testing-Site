@@ -5,8 +5,26 @@ const WellSchema = new Schema({
     wellBarcode: {
         type: String,
         maxlength: 50,
-        required: true,
-        unique: true
+        required: true
+    },
+    pool: {
+        poolBarcode: {
+            type: String,
+            maxlength: 50,
+            required: true
+        },
+        testBarcodes: {
+            type: Array,
+            // REF OBJECT ID
+        }
+    }, 
+    testingStartTime: {
+        type: Date,
+        required: true
+    },
+    result: {
+        type: String, 
+        enum: ['inprogress', 'negative', 'positive']
     }
 })
 

@@ -2,12 +2,10 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const EmployeeTestSchema = new Schema({
-    testBarcode: {
-        type: String,
-        maxlength: 50,
-        required: true,
-        unique: true
-    }, 
+    testBarcodes: {
+        type: Array
+        // REF
+    },
     employeeID: {
         type: String,
         maxlength: 20,
@@ -16,11 +14,10 @@ const EmployeeTestSchema = new Schema({
     collectionTime: {
         type: Date,
         required: true
-    }, 
-    collectedBy: { 
-        type: String,
-        maxlength: 20,
-        required: false
+    },
+    result: {
+        type: String, 
+        enum: ['inprogress', 'negative', 'positive']
     }
 })
 
