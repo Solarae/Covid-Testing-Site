@@ -4,7 +4,7 @@ const connectDB = require('./config/db')
 const employees = require('./routes/api/employees')
 const employeeTests = require('./routes/api/employeeTests')
 const labEmployees = require('./routes/api/labEmployees')
-const tests = require('./routes/api/test')
+const tests = require('./routes/api/tests')
 const wells = require('./routes/api/wells')
 
 
