@@ -5,7 +5,7 @@ const Test = require('./Test')
 const EmployeeTestSchema = new Schema({
     testBarcodes: [{
         type: Schema.Types.ObjectId, 
-        ref: 'Test'
+        ref: Test
     }],
     employeeID: {
         type: String,

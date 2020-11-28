@@ -6,17 +6,19 @@ const WellSchema = new Schema({
     wellBarcode: {
         type: String,
         maxlength: 50,
-        required: true
+        required: true,
+        unique: true
     },
     pool: {
         poolBarcode: {
             type: String,
             maxlength: 50,
-            required: true
+            required: true,
+            unique: true
         },
         testBarcodes: [{
             type: Schema.Types.ObjectId, 
-            ref: 'Test'
+            ref: Test
           }]
     }, 
     testingStartTime: {

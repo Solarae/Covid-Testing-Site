@@ -4,7 +4,8 @@ const Schema = mongoose.Schema
 const TestSchema = new Schema({
     testBarcode: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     poolBarcode: {
         type: String,
