@@ -14,9 +14,11 @@ router.get('/', (req, res) => {
 //@desc     Add test to Test
 router.post('/', (req, res) => {
     const newTest = new Test({
-        testBarcode: req.body.testBarcode,
+        _id: req.body.testBarcode,
         poolBarcode: req.body.poolBarcode,
-        employeeID: req.body.employeeID
+        employeeID: req.body.employeeID,
+        collectionTime: req.body.collectionTime,
+        result: req.body.result
     })
     newTest.save().then(test => res.json(test))
         .catch(error => res.status(404).json(newTest))

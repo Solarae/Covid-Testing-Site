@@ -7,10 +7,13 @@ const PoolSchema = new Schema({
         type: String,
         maxlength: 50,
     },
-    testBarcodes: [{
-        type: Schema.Types.ObjectId, 
-        ref: Test
-    }],
+    testBarcodes: {
+        type: [{
+            type: Schema.Types.ObjectId, 
+            ref: Test
+        }],
+        default: undefined
+      }
 })
 
 PoolSchema.virtual('poolBarcode').get(() => {return this._id})

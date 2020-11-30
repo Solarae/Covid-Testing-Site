@@ -9,7 +9,7 @@ const TestSchema = new Schema({
     poolBarcode: {
         type: String,
         maxlength: 50,
-        required: true
+        default: null
     },
     employeeID: {
         type: String,

@@ -9,7 +9,8 @@ const WellSchema = new Schema({
     },
     pool: {
         type: Schema.Types.ObjectId,
-        ref: Pool
+        ref: Pool,
+        default: null
     }, 
     testingStartTime: {
         type: Date,

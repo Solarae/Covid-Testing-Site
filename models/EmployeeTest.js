@@ -7,10 +7,13 @@ const EmployeeTestSchema = new Schema({
         type: String,
         maxlength: 20,
     },
-    testBarcodes: [{
-        type: Schema.Types.ObjectId, 
-        ref: Test
-    }],
+    testBarcodes: {
+        type: [{
+            type: Schema.Types.ObjectId, 
+            ref: Test
+        }],
+        default: undefined
+      }
 })
 
 EmployeeTestSchema.virtual('employeeID').get(() => {return this._id})
