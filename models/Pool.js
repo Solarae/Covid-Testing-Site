@@ -15,7 +15,7 @@ const PoolSchema = new Schema({
         }],
         default: []
     },
-    well: {
+    well_id: {
         type: String,
         ref: Well,
         default: null

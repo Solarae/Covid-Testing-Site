@@ -7,7 +7,7 @@ const WellSchema = new Schema({
         type: String,
         maxlength: 50,
     },
-    pool: {
+    pool_id: {
         type: String,
         ref: Pool,
         default: null
