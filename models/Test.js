@@ -22,7 +22,8 @@ const TestSchema = new Schema({
     },
     result: {
         type: String, 
-        enum: ['inprogress', 'negative', 'positive']
+        enum: ['inprogress', 'negative', 'positive', 'unassigned'],
+        default: 'unassigned'
     }
 })
 
