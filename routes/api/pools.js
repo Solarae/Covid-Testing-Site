@@ -10,19 +10,18 @@ router.get('/', (req, res) => {
         .then(pools => res.json(pools) )
 })
 
-//@route    POST api/tests
-//@desc     Add test to Test
+//@route    POST api/pools
+//@desc     Add pool to Pool
 router.post('/', (req, res) => {
     const newPool = new Pool({
         _id: req.body._id,
         testBarcodes: req.body.testBarcodes
     })
     newPool.save().then(pool => res.json(pool))
-        .catch(error => res.status(404).json(newPool))
 });
 
-//@route    Delete api/tests/id
-//@desc     Delete a test from Test
+//@route    Delete api/pools/id
+//@desc     Delete a pool from Pool
 router.delete('/:id', (req, res) => {
     Pool.findById(req.params.id)
         .then(pool => pool.remove().then(() => res.json({success : true})))
