@@ -11,14 +11,6 @@ const EmployeeTestSchema = new Schema({
         type: String,
         maxlength: 20,
         required: true
-    }, 
-    collectionTime: {
-        type: Date,
-        required: true
-    },
-    result: {
-        type: String, 
-        enum: ['inprogress', 'negative', 'positive']
     }
 })
 

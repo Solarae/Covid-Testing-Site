@@ -2,10 +2,9 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const TestSchema = new Schema({
-    testBarcode: {
+    _id: {
         type: String,
-        required: true,
-        unique: true
+        maxlength: 50,
     },
     poolBarcode: {
         type: String,
@@ -16,7 +15,17 @@ const TestSchema = new Schema({
         type: String,
         maxlength: 50,
         required: true
+    },
+    collectionTime: {
+        type: Date,
+        required: true
+    },
+    result: {
+        type: String, 
+        enum: ['inprogress', 'negative', 'positive']
     }
 })
+
+PoolSchema.virtual('testBarcode').get(() => {return this._id})
 
 module.exports = Test = mongoose.model('test', TestSchema)
