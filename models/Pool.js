@@ -9,10 +9,10 @@ const PoolSchema = new Schema({
     },
     testBarcodes: {
         type: [{
-            type: Schema.Types.ObjectId, 
+            type: String, 
             ref: Test
         }],
-        default: undefined
+        default: []
       }
 })
 

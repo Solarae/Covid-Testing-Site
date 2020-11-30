@@ -17,7 +17,7 @@ class PoolMapping extends Component {
      }
  
     getPools = () => {
-         axios.get('/api/poolMaps').then(res =>
+         axios.get('/api/pools').then(res =>
              {
                  this.setState( {
                      isLoading: false,

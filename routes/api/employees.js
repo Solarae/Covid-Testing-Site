@@ -17,7 +17,7 @@ router.post('/', (req, res) => {
     console.log(req.body);
 
     const newEmployee = new Employee({
-        employeeID: req.body.employeeID,
+        _id: req.body._id,
         email: req.body.email,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
