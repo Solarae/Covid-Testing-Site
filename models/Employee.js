@@ -28,6 +28,6 @@ const EmployeeSchema = new Schema({
     }
 })
 
-EmployeeTestSchema.virtual('employeeID').get(() => {return this._id})
+EmployeeSchema.virtual('employeeID').get(() => {return this._id})
 
 module.exports = Employee = mongoose.model('employee', EmployeeSchema)

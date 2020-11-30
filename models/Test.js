@@ -26,6 +26,6 @@ const TestSchema = new Schema({
     }
 })
 
-PoolSchema.virtual('testBarcode').get(() => {return this._id})
+TestSchema.virtual('testBarcode').get(() => {return this._id})
 
 module.exports = Test = mongoose.model('test', TestSchema)
