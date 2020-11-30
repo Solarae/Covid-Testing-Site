@@ -2,37 +2,27 @@ import React , {useState} from 'react';
 import { Button , Form } from 'react-bootstrap';
 import './Login.css';
 import axios from 'axios';
-
+import {useHistory} from "react-router-dom";
 
 import {Link} from "react-router-dom";
 
 const Login = () =>{
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const history = useHistory()
 
     const handleSubmit = e =>{
         e.preventDefault();
 
-        console.log("email :" +email + " password "+password)
-
-
-        // fetch("http://localhost:5000/api/employees/login", {
-        //     method: 'POST',
-        //     body:JSON.stringify({email:email,password:password}),
-        //     mode:'cors',
-            
-        //   })
-
-
-
-        axios.post("http://localhost:5000/api/labEmployees/login", {
+        axios.post("/api/labEmployees/login", {
             email: email,
             password: password
           })
           .then(function (response) {
             console.log(response);
-            if(response.data)
-              localStorage.setItem('user', response.data)
+            if(response.data){
+              history.push("/")
+            }
             else
               console.log("Wrong email or password")
           })

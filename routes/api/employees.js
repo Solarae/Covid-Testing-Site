@@ -1,8 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const passport=require('../../config/passport.js')
 const Employee = require('../../models/Employee')
-
+const passport = require('passport')
 
 
 //@route    GET api/employees
@@ -46,11 +45,16 @@ router.post("/login", (req, res, next) => {
         req.logIn(user, (err) => {
           if (err) throw err;
           res.send(user);
-          console.log(req.user);
+          console.log("req.user !!!!!!!!!!!!!"+req.user);
         });
       }
     })(req, res, next);
-  });
+});
+
+router.get("/getInfo" ,(req,res) =>{
+    console.log("info"+req.user);
+    res.send(req.user);
+})
 
 
 module.exports = router

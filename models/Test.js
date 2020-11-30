@@ -19,4 +19,4 @@ const TestSchema = new Schema({
     }
 })
 
-module.exports = Test = mongoose.model('test', PoolMapSchema)
+module.exports = Test = mongoose.model('test', TestSchema)

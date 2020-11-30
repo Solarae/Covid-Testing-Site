@@ -16,7 +16,7 @@ const EmployeeLogin = () =>{
     const [password, setPassword] = useState("");
     const history = useHistory();
 
-    const handleSubmit = e =>{
+    const handleSubmit = async (e) =>{
         e.preventDefault();
 
         console.log("email :" +email + " password "+password)
@@ -34,11 +34,10 @@ const EmployeeLogin = () =>{
         axios.post("http://localhost:5000/api/employees/login", {
             email: email,
             password: password
-          })
+          },{withCredentials: true})
           .then(function (response) {
             console.log(response);
             if(response.data){
-              localStorage.setItem('user', response.data);
               history.push("/employeeResult")
             }
               
@@ -48,23 +47,6 @@ const EmployeeLogin = () =>{
           .catch(function (error) {
             console.log(error);
           });
-
-
-        // axios.post("http://localhost:5000/api/employeeTests", {
-        //   testBarcode: "rthfrth",
-        //   employeeID: "ergerg",
-        //   collectionTime: "erggre",
-        //   collectedBy: "ergerfff"
-        // })
-        // .then(function (response) {
-        //   console.log(response);
-        // })
-        // .catch(function (error) {
-        //   console.log(error);
-        // });
-
-
-
     }
 
 
