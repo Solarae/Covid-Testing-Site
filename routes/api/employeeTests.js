@@ -14,10 +14,8 @@ router.get('/', (req, res) => {
 //@desc     Add an employeetest to EmployeeTest
 router.post('/', (req, res) => {
     const newEmployeeTest = new EmployeeTest({
-        testBarcode: req.body.testBarcode,
-        employeeID: req.body.employeeID,
-        collectionTime: req.body.collectionTime,
-        collectedBy: req.body.collectedBy
+        _id: req.body.employeeID,
+        testBarcodes: req.body.testBarcodes,
     })
     newEmployeeTest.save().then(employeeTest => res.json(employeeTest))
     .catch(error => res.status(404).json({success : false}))

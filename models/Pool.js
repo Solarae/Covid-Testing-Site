@@ -2,10 +2,10 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const Test = require('./Test')
 
-const EmployeeTestSchema = new Schema({
+const PoolSchema = new Schema({
     _id: {
         type: String,
-        maxlength: 20,
+        maxlength: 50,
     },
     testBarcodes: {
         type: [{
@@ -16,6 +16,6 @@ const EmployeeTestSchema = new Schema({
       }
 })
 
-EmployeeTestSchema.virtual('employeeID').get(() => {return this._id})
+PoolSchema.virtual('poolBarcode').get(() => {return this._id})
 
-module.exports = EmployeeTest = mongoose.model('employeeTest', EmployeeTestSchema)
+module.exports = Pool = mongoose.model('pool', PoolSchema)

@@ -1,25 +1,16 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const Test = require('./Test')
+const Pool = require('./Pool')
 
 const WellSchema = new Schema({
-    wellBarcode: {
+    _id: {
         type: String,
         maxlength: 50,
-        required: true,
-        unique: true
     },
     pool: {
-        poolBarcode: {
-            type: String,
-            maxlength: 50,
-            required: true,
-            unique: true
-        },
-        testBarcodes: [{
-            type: Schema.Types.ObjectId, 
-            ref: Test
-          }]
+        type: Schema.Types.ObjectId,
+        ref: Pool,
+        default: null
     }, 
     testingStartTime: {
         type: Date,
@@ -30,5 +21,7 @@ const WellSchema = new Schema({
         enum: ['inprogress', 'negative', 'positive']
     }
 })
+
+WellSchema.virtual('wellBarcode').get(() => {return this._id})
 
 module.exports = Well = mongoose.model('well', WellSchema)
