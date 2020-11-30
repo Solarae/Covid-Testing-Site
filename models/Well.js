@@ -8,7 +8,7 @@ const WellSchema = new Schema({
         maxlength: 50,
     },
     pool: {
-        type: Schema.Types.ObjectId,
+        type: String,
         ref: Pool,
         default: null
     }, 
