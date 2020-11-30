@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 //@desc     Add test to Test
 router.post('/', (req, res) => {
     const newPool = new Pool({
-        _id: req.body.poolBarcode,
+        _id: req.body._id,
         testBarcodes: req.body.testBarcodes
     })
     newPool.save().then(pool => res.json(pool))
