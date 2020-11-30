@@ -6,7 +6,7 @@ const Pool = require('../../models/Pool')
 //@route    GET api/pools
 //@desc     Get All pools In Pool
 router.get('/', (req, res) => {
-    Pool.find()
+    Pool.find().populate('testBarcodes')
         .then(pools => res.json(pools) )
 })
 
