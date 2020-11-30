@@ -2,12 +2,10 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const EmployeeSchema = new Schema({
-    employeeID: {
+    _id: {
         type: String,
         maxlength: 20,
-        required: true,
-        unique: true
-    }, 
+    },
     email: {
         type: String,
         maxlength: 50,
@@ -29,5 +27,7 @@ const EmployeeSchema = new Schema({
         required: true
     }
 })
+
+EmployeeTestSchema.virtual('employeeID').get(() => {return this._id})
 
 module.exports = Employee = mongoose.model('employee', EmployeeSchema)
