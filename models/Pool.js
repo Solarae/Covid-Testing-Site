@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const Test = require('./Test')
+const Well = require('./Well')
 
 const PoolSchema = new Schema({
     _id: {
@@ -13,7 +14,12 @@ const PoolSchema = new Schema({
             ref: Test
         }],
         default: []
-      }
+    },
+    well: {
+        type: String,
+        ref: Well,
+        default: null
+    }, 
 })
 
 PoolSchema.virtual('poolBarcode').get(() => {return this._id})
