@@ -10,8 +10,11 @@ class PoolMapping extends Component {
         selectedPool: null,
         testToAdd: "",
         poolTestBarcodes: [],
+        editPoolMode: false,
         deletePoolError: null,
-        editPoolError: null
+        editPoolError: null,
+        deleteTestBarcodes: [],
+        addTestBarcodes: []
     }
 
     componentDidMount() {
@@ -28,9 +31,8 @@ class PoolMapping extends Component {
              })
      }
  
-    submitPool = (e) => {
-        e.preventDefault()
-        if (this.state.pools.find(pool => pool.poolBarcode === this.state.poolBarcode) !== undefined) {
+    submitPool = () => {
+        if (this.state.editPoolMode) {
             this.updatePool()
         } else {
             this.addPool()
@@ -39,11 +41,13 @@ class PoolMapping extends Component {
 
     updatePool = () => {
         var newPools = JSON.parse(JSON.stringify(this.state.pools))
-        newPools.find((pool) => pool._id === this.state.selectedPool._id)
-                .testBarcodes = this.state.poolTestBarcodes
-        axios.patch(`/api/poolMaps/${this.state.selectedPool._id}`, 
-                { testBarcodes: this.state.poolTestBarcodes } )
-                    .then(res => { 
+        var editedPool = newPools.find((pool) => pool._id === this.state.selectedPool._id)
+        editedPool.testBarcodes = this.state.poolTestBarcodes
+        editedPool._id = this.state.poolBarcode
+        axios.patch(`/api/pools/${this.state.selectedPool._id}`, 
+                { _id: this.state.poolBarcode, testBarcodes: this.state.poolTestBarcodes, well_id:
+                    this.state.selectedPool.well_id } )
+                    .then(() => { 
                         this.setState( { pools: newPools } )
                     })
     }
@@ -53,7 +57,7 @@ class PoolMapping extends Component {
             poolBarcode: this.state.poolBarcode,
             testBarcodes: this.state.poolTestBarcodes
          }
-        axios.post('/api/poolMaps/', newPool).then(res =>
+        axios.post('/api/pools/', newPool).then(res =>
             {
                 this.setState( {
                     pools: [...this.state.pools, res.data]
@@ -65,7 +69,7 @@ class PoolMapping extends Component {
         if (this.state.selectedPool.well_id !== null) {
             this.setState ({deletePoolError: "Cannot delete a Pool that is assigned to a Well"})
         } else {
-            axios.delete(`/api/pools/${id}`).then(res =>
+            axios.delete(`/api/pools/${id}`).then(() =>
                 {
                     this.setState( {
                         pools: this.state.pools.filter(pool => pool._id !== id)
@@ -88,23 +92,35 @@ class PoolMapping extends Component {
             this.setState ({editPoolError: "Cannot edit a Pool that is assigned to a Well"})
         } else {
             this.setState( { poolBarcode: this.state.selectedPool._id, 
-                poolTestBarcodes: this.state.selectedPool.testBarcodes} )
+                poolTestBarcodes: this.state.selectedPool.testBarcodes, editPoolMode : true} )
         }
     }
 
     toDelete = (testBarcode) => {
         var newPoolTestBarcodes = [...this.state.poolTestBarcodes]
         newPoolTestBarcodes.splice(newPoolTestBarcodes.indexOf(testBarcode),1)
-        this.setState ( {
-            poolTestBarcodes: newPoolTestBarcodes
-        })
+        const prevLength = this.state.addTestBarcodes.length
+        var newAddTestBarcodes = [...this.state.addTestBarcodes]
+        newAddTestBarcodes = newAddTestBarcodes.filter(addTest => addTest !== testBarcode)
+        if (prevLength == newAddTestBarcodes.length) {
+            this.setState ( {
+                poolTestBarcodes: newPoolTestBarcodes,
+                deleteTestBarcodes: [...this.state.deleteTestBarcodes, testBarcode]
+            })
+        } else {
+            this.setState ( {
+                poolTestBarcodes: newPoolTestBarcodes,
+                addTestBarcodes: newAddTestBarcodes
+            })
+        }
     }
 
     toAdd = (testBarcode) => {
         var newPoolTestBarcodes = [...this.state.poolTestBarcodes]
         newPoolTestBarcodes = [...newPoolTestBarcodes, testBarcode]
         this.setState ( {
-            poolTestBarcodes: newPoolTestBarcodes
+            poolTestBarcodes: newPoolTestBarcodes,
+            addTestBarcodes: [...this.state.addTestBarcodes, testBarcode]
         })
     }
 
@@ -146,7 +162,7 @@ class PoolMapping extends Component {
                 <Row className="row justify-content-center">
                     <h1>PoolMapping</h1>
                 </Row>
-                <Form onSubmit = {(e) => this.submitPool(e)}>
+                <Form>
                     <Row>
                         <FormGroup>
                             <Label>Pool Barcode:</Label>
@@ -177,7 +193,7 @@ class PoolMapping extends Component {
                     </FormGroup>
                     </Row>
                     <Row>
-                        <Button>Submit Pool</Button>  
+                        <Button onClick={() => this.submitPool()}>Submit Pool</Button>  
                     </Row>
                 </Form>
                 <div>
