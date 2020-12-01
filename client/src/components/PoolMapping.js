@@ -74,8 +74,8 @@ class PoolMapping extends Component {
         }
      }
 
-    changeRadio = () => {
-        this.setState( { deletePoolError: null } )
+    changeRadio = (pool) => {
+        this.setState( { selectedPool: pool, deletePoolError: null, editPoolError: null } )
     }
 
     deletePoolClick = () => {
@@ -83,9 +83,13 @@ class PoolMapping extends Component {
             this.deletePool(this.state.selectedPool._id)
     }
 
-    editPoolClick = (pool) => {
-        this.setState( { selectedPool: pool, poolBarcode: pool._id, 
-            poolTestBarcodes: pool.testBarcodes} )
+    editPoolClick = () => {
+        if (this.state.selectedPool.well_id !== null) {
+            this.setState ({editPoolError: "Cannot edit a Pool that is assigned to a Well"})
+        } else {
+            this.setState( { poolBarcode: this.state.selectedPool._id, 
+                poolTestBarcodes: this.state.selectedPool.testBarcodes} )
+        }
     }
 
     toDelete = (testBarcode) => {
@@ -183,10 +187,11 @@ class PoolMapping extends Component {
                     </Table>
                 </div>
                 <Row>
-                    <Button>Edit Pool</Button>
+                    <Button onClick={this.editPoolClick}>Edit Pool</Button>
                     <Button onClick={this.deletePoolClick}>Delete Pool</Button>
                 </Row>
-                {this.state.deletePoolError != null && <div className="text-center"><p>{this.state.deletePoolError}</p></div> }    
+                {this.state.deletePoolError != null && <div className="text-center"><p>{this.state.deletePoolError}</p></div> }
+                {this.state.editPoolError != null && <div className="text-center"><p>{this.state.editPoolError}</p></div> }     
             </Container>
         )
     }
