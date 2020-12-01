@@ -9,7 +9,8 @@ class PoolMapping extends Component {
         isLoading: false,
         selectedPool: null,
         testToAdd: "",
-        poolTestBarcodes: []
+        poolTestBarcodes: [],
+        deleteError: null
     }
 
     componentDidMount() {
@@ -60,22 +61,30 @@ class PoolMapping extends Component {
     }
 
     deletePool = (id) => {
-        axios.delete(`/api/poolMaps/${id}`).then(res =>
-            {
-                this.setState( {
-                    pools: this.state.pools.filter(pool => pool._id !== id)
-                } )
-            })
+        if (this.state.selectedPool.well_id !== null) {
+            this.setState ({deleteError: "Cannot delete a Pool that is assigned to a Well"})
+        } else {
+            axios.delete(`/api/pools/${id}`).then(res =>
+                {
+                    this.setState( {
+                        pools: this.state.pools.filter(pool => pool._id !== id)
+                    } )
+                })
+        }
      }
 
-    changeRadio = (pool) => {
-        this.setState( { selectedPool: pool, poolBarcode: pool.poolBarcode, 
-            poolTestBarcodes: pool.testBarcodes } )
+    changeRadio = () => {
+        this.setState( { deleteError: null } )
     }
 
     deletePoolClick = () => {
         if (this.state.selectedPool !== null)
             this.deletePool(this.state.selectedPool._id)
+    }
+
+    editPoolClick = (pool) => {
+        this.setState( { selectedPool: pool, poolBarcode: pool._id, 
+            poolTestBarcodes: pool.testBarcodes} )
     }
 
     toDelete = (testBarcode) => {
@@ -95,7 +104,7 @@ class PoolMapping extends Component {
     }
 
     renderTableHeader() {
-        const header = ["Pool Barcode", "Test Barcode"]
+        const header = ["Pool Barcode", "Test Barcodes"]
         return header.map((hd) => {
             return <th key={`Header ${hd}`}>{hd}</th>
         })
@@ -110,7 +119,7 @@ class PoolMapping extends Component {
                         <Label check>
                             <Input type="radio" checked={this.state.selectedPool !== null && this.state.selectedPool._id === pool._id} 
                                         onChange= {() => this.changeRadio(pool)}/>{' '}
-                            {pool.poolBarcode}
+                            {pool._id}
                         </Label>
                     </FormGroup>
                   </td>
@@ -172,11 +181,11 @@ class PoolMapping extends Component {
                         <tbody>{this.renderTableData()}</tbody>
                     </Table>
                 </div>
-                <div className="text-center">
-                    <Button onClick={this.deletePoolClick}>
-                        Delete
-                    </Button>
-                </div>    
+                <Row>
+                    <Button>Edit Pool</Button>
+                    <Button onClick={this.deletePoolClick}>Delete Pool</Button>
+                </Row>
+                {this.state.deleteError != null && <div className="text-center"><p>{this.state.deleteError}</p></div> }    
             </Container>
         )
     }

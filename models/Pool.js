@@ -13,7 +13,11 @@ const PoolSchema = new Schema({
             ref: Test
         }],
         default: []
-      }
+      },
+    well_id: {
+        type: String,
+        default: null
+    }
 })
 
 PoolSchema.virtual('poolBarcode').get(() => {return this._id})
