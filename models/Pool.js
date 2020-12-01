@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const Test = require('./Test')
-const Well = require('./Well')
 
 const PoolSchema = new Schema({
     _id: {
@@ -17,7 +16,6 @@ const PoolSchema = new Schema({
     },
     well_id: {
         type: String,
-        ref: Well,
         default: null
     }, 
 })

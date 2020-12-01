@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const Pool = require('./Pool')
 
 const WellSchema = new Schema({
     _id: {
@@ -8,9 +7,7 @@ const WellSchema = new Schema({
         maxlength: 50,
     },
     pool_id: {
-        type: String,
-        ref: Pool,
-        default: null
+        type: String
     }, 
     testingStartTime: {
         type: Date,
