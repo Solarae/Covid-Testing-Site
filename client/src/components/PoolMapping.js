@@ -10,7 +10,8 @@ class PoolMapping extends Component {
         selectedPool: null,
         testToAdd: "",
         poolTestBarcodes: [],
-        deleteError: null
+        deletePoolError: null,
+        editPoolError: null
     }
 
     componentDidMount() {
@@ -62,7 +63,7 @@ class PoolMapping extends Component {
 
     deletePool = (id) => {
         if (this.state.selectedPool.well_id !== null) {
-            this.setState ({deleteError: "Cannot delete a Pool that is assigned to a Well"})
+            this.setState ({deletePoolError: "Cannot delete a Pool that is assigned to a Well"})
         } else {
             axios.delete(`/api/pools/${id}`).then(res =>
                 {
@@ -74,7 +75,7 @@ class PoolMapping extends Component {
      }
 
     changeRadio = () => {
-        this.setState( { deleteError: null } )
+        this.setState( { deletePoolError: null } )
     }
 
     deletePoolClick = () => {
@@ -185,7 +186,7 @@ class PoolMapping extends Component {
                     <Button>Edit Pool</Button>
                     <Button onClick={this.deletePoolClick}>Delete Pool</Button>
                 </Row>
-                {this.state.deleteError != null && <div className="text-center"><p>{this.state.deleteError}</p></div> }    
+                {this.state.deletePoolError != null && <div className="text-center"><p>{this.state.deletePoolError}</p></div> }    
             </Container>
         )
     }
