@@ -39,8 +39,8 @@ router.delete('/:id', (req, res) => {
 //@desc     Patch a pool from Pool
 router.patch('/:id', (req, res) => {
     Pool.findById(req.body._id)
-        .then(res => {
-            if (res !== null) {
+        .then(pool => {
+            if (pool !== null && res.params.id !== req.body._id) {
                 res.status(404).json({success : false})
             } else {
                 if (req.params.id !== req.body._id) {
