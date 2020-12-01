@@ -40,11 +40,12 @@ router.delete('/:id', (req, res) => {
 router.patch('/:id', (req, res) => {
     Pool.findById(req.body._id)
         .then(pool => {
-            if (pool !== null && res.params.id !== req.body._id) {
-                res.status(404).json({success : false})
+            if (pool !== null && req.params.id !== req.body._id) {
+                throw new Error('Invalid Pool Barcode')
             } else {
                 if (req.params.id !== req.body._id) {
-                        res.remove()
+                        Pool.findById(req.params.id)
+                        .then(pool => pool.remove()
                             .then(() => {
                                 const newPool = new Pool({
                                     _id: req.body._id,
@@ -54,18 +55,24 @@ router.patch('/:id', (req, res) => {
                                 newPool.save()
                                     .then(() => {
                                         Test.updateMany(
-                                            { _id: { $in: req.body.addedTests } },
-                                            { $push: { pools : req.body._id } },
+                                            { _id: { $in: req.body.testBarcodes } },
+                                            {  $push: { pools : req.body._id } },
                                          ).then(() => {
                                             Test.updateMany(
-                                                { _id: { $in: req.body.deletedTests } },
-                                                { $pull: { pools : req.body._id } },
-                                             ).then((res) => res.json(res))
+                                                { _id: { $in: req.body.testBarcodes } },
+                                                { $pull: { pools : req.params.id } },
+                                             ).then(() => {
+                                                Test.updateMany(
+                                                    { _id: { $in: req.body.deletedTests } },
+                                                    { $pull: { pools : req.body._id } },
+                                                ).then((data) => res.json(data))
+                                                })
                                             })
                                         })
                                     })
+                                    )
                                 } else {
-                                    Pool.updateById(req.params.id, {$set: req.body.testBarcodes} )
+                                    Pool.findByIdAndUpdate(req.params.id, {$set: {testBarcodes: req.body.testBarcodes}} )
                                         .then(() => {
                                             Test.updateMany(
                                                 { _id: { $in: req.body.addedTests } },
@@ -74,12 +81,13 @@ router.patch('/:id', (req, res) => {
                                                     Test.updateMany(
                                                         { _id: { $in: req.body.deletedTests } },
                                                         { $pull: { pools : req.body._id } },
-                                                        ).then((res) => res.json(res))
+                                                        ).then((data) => res.json(data))
                                                     })
                                                 })
                                             }
                                         }
                                     })
+                                    .catch(error => res.status(404).json({success : false}))
                                 })
 
 module.exports = router
