@@ -32,4 +32,19 @@ router.delete('/:id', (req, res) => {
         .catch(error => res.status(404).json({success : false}))
 })
 
+//@route    GET api/tests/:employeeID
+//@desc     Get All Tests from some employee
+router.get('/:employeeID', async (req, res) => {
+    let result = await Test.find({employeeID:req.params.employeeID});
+
+    console.log(result);
+
+
+    res.send(result);
+        
+})
+
+
+
+
 module.exports = router

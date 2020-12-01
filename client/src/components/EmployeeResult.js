@@ -4,7 +4,7 @@ import { Table } from 'reactstrap';
 
 const EmployeeResult = () =>{
 
-    const [result,setResult] = useState();
+    const [test,setTest] = useState([]);
     const [user,setUser] = useState("");
 
 
@@ -22,14 +22,10 @@ const EmployeeResult = () =>{
         setUser(userInfo.data);
 
 
-        //get all the test barcodes in which this employee has
-        let testBarcodes = await axios.get("/api/employeeTests/getTestBarcodes/22342345",{withCredentials:true})
-        
-        console.log(testBarcodes)
-
-        
-
-
+        //get all the tests in which this employee has
+        let tests = await axios.get("api/tests/113222636",{withCredentials:true})
+        setTest(tests.data)
+        console.log(tests.data)
     }
 
 
@@ -45,7 +41,7 @@ const EmployeeResult = () =>{
         <>
             <h1>Welcome to employee result</h1>
 
-            <h2>{user.employeeID}</h2>
+            <h2>{user._id}</h2>
 
             <Table>
                 <thead>
@@ -56,7 +52,15 @@ const EmployeeResult = () =>{
                 </thead>
 
                 <tbody>
+                    {test.map((element) => 
 
+                        <>
+                            <tr>
+                                <td>{element.collectionTime}</td>
+                                <td>{element.result}</td>
+                            </tr>
+                        </>
+                    )}
                 </tbody>
 
             </Table>

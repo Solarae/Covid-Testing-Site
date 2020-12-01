@@ -14,10 +14,10 @@ router.get('/', (req, res) => {
 //@route    POST api/employees
 //@desc     Add an employee to Employee
 router.post('/', (req, res) => {
-    console.log(req.body);
+    console.log(req.body._id);
 
     const newEmployee = new Employee({
-        _id: req.body._id,
+        _id: req.body.employeeID,
         email: req.body.email,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
@@ -44,6 +44,7 @@ router.post("/login", (req, res, next) => {
       else {
         req.logIn(user, (err) => {
           if (err) throw err;
+         // console.log("req.user is "+req.user)
           res.send(user);
         });
       }
@@ -51,7 +52,6 @@ router.post("/login", (req, res, next) => {
 });
 
 router.get("/getInfo" ,(req,res) =>{
-    console.log("info"+req.user);
     res.send(req.user);
 })
 
