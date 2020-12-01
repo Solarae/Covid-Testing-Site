@@ -13,8 +13,8 @@ class PoolMapping extends Component {
         editPoolMode: false,
         deletePoolError: null,
         editPoolError: null,
-        deleteTestBarcodes: [],
-        addTestBarcodes: []
+        deletedTestBarcodes: [],
+        addedTestBarcodes: []
     }
 
     componentDidMount() {
@@ -46,7 +46,8 @@ class PoolMapping extends Component {
         editedPool._id = this.state.poolBarcode
         axios.patch(`/api/pools/${this.state.selectedPool._id}`, 
                 { _id: this.state.poolBarcode, testBarcodes: this.state.poolTestBarcodes, well_id:
-                    this.state.selectedPool.well_id } )
+                    this.state.selectedPool.well_id, addedTests : this.state.addedTestBarcodes,
+                    deletedTests: this.state.deletedTestBarcodes } )
                     .then(() => { 
                         this.setState( { pools: newPools } )
                     })
@@ -99,18 +100,17 @@ class PoolMapping extends Component {
     toDelete = (testBarcode) => {
         var newPoolTestBarcodes = [...this.state.poolTestBarcodes]
         newPoolTestBarcodes.splice(newPoolTestBarcodes.indexOf(testBarcode),1)
-        const prevLength = this.state.addTestBarcodes.length
-        var newAddTestBarcodes = [...this.state.addTestBarcodes]
-        newAddTestBarcodes = newAddTestBarcodes.filter(addTest => addTest !== testBarcode)
-        if (prevLength == newAddTestBarcodes.length) {
+        var newAddedTestBarcodes = [...this.state.addedTestBarcodes]
+        newAddedTestBarcodes = newAddedTestBarcodes.filter(addTest => addTest !== testBarcode)
+        if (this.state.addedTestBarcodes.length === newAddedTestBarcodes.length) {
             this.setState ( {
                 poolTestBarcodes: newPoolTestBarcodes,
-                deleteTestBarcodes: [...this.state.deleteTestBarcodes, testBarcode]
+                deletedTestBarcodes: [...this.state.deletedTestBarcodes, testBarcode]
             })
         } else {
             this.setState ( {
                 poolTestBarcodes: newPoolTestBarcodes,
-                addTestBarcodes: newAddTestBarcodes
+                addedTestBarcodes: newAddedTestBarcodes
             })
         }
     }
@@ -120,7 +120,7 @@ class PoolMapping extends Component {
         newPoolTestBarcodes = [...newPoolTestBarcodes, testBarcode]
         this.setState ( {
             poolTestBarcodes: newPoolTestBarcodes,
-            addTestBarcodes: [...this.state.addTestBarcodes, testBarcode]
+            addedTestBarcodes: [...this.state.addedTestBarcodes, testBarcode]
         })
     }
 

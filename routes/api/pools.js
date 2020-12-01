@@ -20,7 +20,7 @@ router.post('/', (req, res) => {
         well_id: req.body.well_id
     })
     newPool.save().then(() => {
-        Pool.updateMany(
+        Test.updateMany(
             { _id: { $in: req.body.testBarcodes } },
             { $push: { pools : req.body._id } },
          )
@@ -41,7 +41,7 @@ router.patch('/:id', (req, res) => {
     Pool.findById(req.body._id)
         .then(res => {
             if (res !== null) {
-                res.status(409)
+                res.status(404).json({success : false})
             } else {
                 if (req.params.id !== req.body._id) {
                         res.remove()
@@ -53,17 +53,33 @@ router.patch('/:id', (req, res) => {
                                 })
                                 newPool.save()
                                     .then(() => {
-                                        
+                                        Test.updateMany(
+                                            { _id: { $in: req.body.addedTests } },
+                                            { $push: { pools : req.body._id } },
+                                         ).then(() => {
+                                            Test.updateMany(
+                                                { _id: { $in: req.body.deletedTests } },
+                                                { $pull: { pools : req.body._id } },
+                                             ).then((res) => res.json(res))
+                                            })
+                                        })
                                     })
-                            })
-                } else{
-                    Pool.updateById(req.params.id, {$set: req.body.testBarcodes} )
-                        .then(() => {
-
-                        })
-                }
-            }
-        })
-})
+                                } else {
+                                    Pool.updateById(req.params.id, {$set: req.body.testBarcodes} )
+                                        .then(() => {
+                                            Test.updateMany(
+                                                { _id: { $in: req.body.addedTests } },
+                                                { $push: { pools : req.body._id } },
+                                                ).then(() => {
+                                                    Test.updateMany(
+                                                        { _id: { $in: req.body.deletedTests } },
+                                                        { $pull: { pools : req.body._id } },
+                                                        ).then((res) => res.json(res))
+                                                    })
+                                                })
+                                            }
+                                        }
+                                    })
+                                })
 
 module.exports = router
