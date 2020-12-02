@@ -19,12 +19,11 @@ router.post('/', (req, res) => {
         testBarcodes: req.body.testBarcodes,
         well_id: req.body.well_id
     })
-    newPool.save().then(() => {
-        Test.updateMany(
-            { _id: { $in: req.body.testBarcodes } },
-            { $push: { pools : req.body._id } },
-         )
-    }).then((pool) => res.json(pool))
+    newPool.save().then((pool) => {res.json(pool)})
+    Test.updateMany(
+        { _id: { $in: req.body.testBarcodes } },
+        { $push: { pools : req.body._id } }
+     )
 });
 
 //@route    Delete api/pools/id
@@ -56,15 +55,15 @@ router.patch('/:id', (req, res) => {
                                     .then(() => {
                                         Test.updateMany(
                                             { _id: { $in: req.body.testBarcodes } },
-                                            {  $push: { pools : req.body._id } },
+                                            {  $push: { pools : req.body._id } }
                                          ).then(() => {
                                             Test.updateMany(
                                                 { _id: { $in: req.body.testBarcodes } },
-                                                { $pull: { pools : req.params.id } },
+                                                { $pull: { pools : req.params.id } }
                                              ).then(() => {
                                                 Test.updateMany(
                                                     { _id: { $in: req.body.deletedTests } },
-                                                    { $pull: { pools : req.body._id } },
+                                                    { $pull: { pools : req.body._id } }
                                                 ).then((data) => res.json(data))
                                                 })
                                             })

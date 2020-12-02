@@ -51,22 +51,26 @@ class PoolMapping extends Component {
                     this.state.selectedPool.well_id, addedTests : this.state.addedTestBarcodes,
                     deletedTests: this.state.deletedTestBarcodes } )
                     .then(() => {
-                        this.setState( { pools: newPools, invalidPoolBarcodeError: null } )
+                        this.setState( { pools: newPools, invalidPoolBarcodeError: null, 
+                            deletedTestBarcodes: [], addedTestBarcodes: [], editPoolMode: false,
+                            poolBarcode: '', poolTestBarcodes: [], selectedPool: null,
+                            testToAdd: ''  } )
                     })
-                    .catch((error) => {
+                    .catch(() => {
                         this.setState( { invalidPoolBarcodeError: 'A pool with the entered barcode already exists' } )
                     })
     }
 
     addPool = () => {
         const newPool = {
-            poolBarcode: this.state.poolBarcode,
+            _id: this.state.poolBarcode,
             testBarcodes: this.state.poolTestBarcodes
          }
         axios.post('/api/pools/', newPool).then(res =>
             {
                 this.setState( {
-                    pools: [...this.state.pools, res.data]
+                    pools: [...this.state.pools, res.data], deletedTestBarcodes: [], addedTestBarcodes: [], 
+                    poolBarcode: '', poolTestBarcodes: [], testToAdd: '', invalidPoolBarcodeError: null
                 } )
             })
     }
@@ -121,21 +125,24 @@ class PoolMapping extends Component {
     }
 
     toAdd = (testBarcode) => {
-        axios.get(`/api/pools/${testBarcode}`)
+        if (this.state.poolTestBarcodes.find((testBC) => testBC === testBarcode) === undefined) {
+            axios.get(`/api/tests/${testBarcode}`)
             .then((res) => {
-                if (res !== null) {
+                if (res.data !== null) {
                     var newPoolTestBarcodes = [...this.state.poolTestBarcodes]
                     newPoolTestBarcodes = [...newPoolTestBarcodes, testBarcode]
                     this.setState ( {
                         poolTestBarcodes: newPoolTestBarcodes,
                         addedTestBarcodes: [...this.state.addedTestBarcodes, testBarcode],
                         invalidTestBarcodeError: null
-                    })
+                    })     
                 } else {
                     this.setState( { invalidTestBarcodeError: 'Test with the given barcode does not exist' } )
-                }
+                }   
             })
-        
+        } else{
+            this.setState( { invalidTestBarcodeError: 'Test Barcode already exists in the Pool' } )
+        }
     }
 
     renderTableHeader() {
@@ -147,6 +154,7 @@ class PoolMapping extends Component {
 
     renderTableData() {
         return this.state.pools.map((pool) => {
+            console.log(pool)
            return (
               <tr key={pool._id}>
                   <td>
