@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Spinner, Container, ListGroup, ListGroupItem, Row, Table, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Spinner, Container, ListGroup, ListGroupItem, Row, Table, Form, FormGroup, FormText, Label, Input, Button } from 'reactstrap';
 
 class PoolMapping extends Component {
     state = {
@@ -14,6 +14,7 @@ class PoolMapping extends Component {
         deletePoolError: null,
         editPoolError: null,
         invalidPoolBarcodeError: null,
+        invalidTestBarcodeError: null,
         deletedTestBarcodes: [],
         addedTestBarcodes: []
     }
@@ -50,9 +51,9 @@ class PoolMapping extends Component {
                     this.state.selectedPool.well_id, addedTests : this.state.addedTestBarcodes,
                     deletedTests: this.state.deletedTestBarcodes } )
                     .then(() => {
-                        this.setState( { pools: newPools } )
+                        this.setState( { pools: newPools, invalidPoolBarcodeError: null } )
                     })
-                    .catch(() => {
+                    .catch((error) => {
                         this.setState( { invalidPoolBarcodeError: 'A pool with the entered barcode already exists' } )
                     })
     }
@@ -120,12 +121,21 @@ class PoolMapping extends Component {
     }
 
     toAdd = (testBarcode) => {
-        var newPoolTestBarcodes = [...this.state.poolTestBarcodes]
-        newPoolTestBarcodes = [...newPoolTestBarcodes, testBarcode]
-        this.setState ( {
-            poolTestBarcodes: newPoolTestBarcodes,
-            addedTestBarcodes: [...this.state.addedTestBarcodes, testBarcode]
-        })
+        axios.get(`/api/pools/${testBarcode}`)
+            .then((res) => {
+                if (res !== null) {
+                    var newPoolTestBarcodes = [...this.state.poolTestBarcodes]
+                    newPoolTestBarcodes = [...newPoolTestBarcodes, testBarcode]
+                    this.setState ( {
+                        poolTestBarcodes: newPoolTestBarcodes,
+                        addedTestBarcodes: [...this.state.addedTestBarcodes, testBarcode],
+                        invalidTestBarcodeError: null
+                    })
+                } else {
+                    this.setState( { invalidTestBarcodeError: 'Test with the given barcode does not exist' } )
+                }
+            })
+        
     }
 
     renderTableHeader() {
@@ -172,7 +182,7 @@ class PoolMapping extends Component {
                             <Label>Pool Barcode:</Label>
                             <Input type="text" value = {this.state.poolBarcode} 
                                     onChange={(e) => this.setState({ poolBarcode: e.target.value })} />
-                            {this.state.deletePoolError != null && <FormText>{this.state.invalidPoolBarcodeError}</FormText>}
+                            {this.state.invalidPoolBarcodeError != null && <FormText>{this.state.invalidPoolBarcodeError}</FormText>}
                         </FormGroup>
                     </Row>
                     <Row>
@@ -195,6 +205,7 @@ class PoolMapping extends Component {
                             <Input type="text" value = {this.state.testToAdd} 
                                     onChange={(e) => this.setState({ testToAdd: e.target.value })} />
                         <Button onClick = {() => this.toAdd(this.state.testToAdd)}>Add Row</Button>
+                        {this.state.invalidTestBarcodeError != null && <FormText>{this.state.invalidTestBarcodeError}</FormText>}
                     </FormGroup>
                     </Row>
                     <Row>

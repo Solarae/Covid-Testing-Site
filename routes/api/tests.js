@@ -10,6 +10,13 @@ router.get('/', (req, res) => {
         .then(tests => res.json(tests) )
 })
 
+//@route    GET api/tests/id
+//@desc     Get the test with given id
+router.get('/', (req, res) => {
+    Test.findById(req.params.id)
+        .then(test => res.json(test) )
+})
+
 //@route    POST api/tests
 //@desc     Add test to Test
 router.post('/', (req, res) => {
