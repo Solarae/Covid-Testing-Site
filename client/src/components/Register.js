@@ -18,7 +18,7 @@ const Register = () => {
 
 
     return(
-            <Form method = "POST" action = "http://localhost:5000/api/employees" >
+            <Form method = "POST" action = "http://localhost:5000/api/labEmployees" >
                 <Form.Group>
                   <Form.Label>First name</Form.Label>
                   <Form.Control name="firstName" type="text" placeholder="Enter first name" />

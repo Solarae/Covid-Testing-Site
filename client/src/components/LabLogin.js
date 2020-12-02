@@ -6,22 +6,24 @@ import {useHistory} from "react-router-dom";
 
 import {Link} from "react-router-dom";
 
-const Login = () =>{
+const Login = (props) =>{
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const history = useHistory()
 
     const handleSubmit = e =>{
         e.preventDefault();
-
+        console.log("email "+email + " password "+password)
         axios.post("/api/labEmployees/login", {
             email: email,
             password: password
-          })
+          },{withCredentials:true})
           .then(function (response) {
             console.log(response);
             if(response.data){
-              history.push("/")
+              props.setLogIn([true,"LabEmployee"])
+              localStorage.setItem("user",[true,"LabEmployee"])
+              history.push("/labHome")
             }
             else
               console.log("Wrong email or password")
@@ -44,9 +46,9 @@ const Login = () =>{
             <h1> Lab Technician Login Page</h1>
         
             <Form onSubmit = {handleSubmit}>
-              <Form.Group controlId="formBasicEmail">
+              <Form.Group>
                   <Form.Label>Lab Technician ID</Form.Label>
-                  <Form.Control onChange = {e => setEmail(e.target.value) }  type="email" placeholder="Enter ID" />
+                  <Form.Control onChange = {e => setEmail(e.target.value) } placeholder="Enter ID" />
                   <Form.Text >
                   Don't have an account? <Link to="/register">Click here to register! </Link>
                   </Form.Text>
@@ -56,9 +58,6 @@ const Login = () =>{
                   <Form.Label>Password</Form.Label>
                   <Form.Control onChange = {e => setPassword(e.target.value) } type="password" placeholder="Password" />
               </Form.Group>
-              <Button variant="primary" type="submit">
-                  Login Collector
-              </Button>
 
               <Button variant="primary" type="submit">
                 Lab login

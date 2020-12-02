@@ -11,7 +11,7 @@ import {
     useHistory
   } from "react-router-dom";
 
-const EmployeeLogin = () =>{
+const EmployeeLogin = (props) =>{
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const history = useHistory();
@@ -38,7 +38,11 @@ const EmployeeLogin = () =>{
           .then(function (response) {
             console.log(response);
             if(response.data){
-              history.push("/employeeResult")
+              
+              props.setLogIn([true,"Employee"])
+              localStorage.setItem("user",[true,"Employee"])
+              history.push("/employeeResult");
+
             }
               
             else
@@ -72,10 +76,6 @@ const EmployeeLogin = () =>{
               </Form.Group>
               <Button variant="primary" type="submit">
                   Login Collector
-              </Button>
-
-              <Button variant="primary" type="submit">
-                Lab login
               </Button>
             </Form>
         </>

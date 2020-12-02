@@ -55,5 +55,10 @@ router.get("/getInfo" ,(req,res) =>{
     res.send(req.user);
 })
 
+router.get("/logout",(req,res)=>{
+  req.logOut();
+  res.send("Success Logout")
+})
+
 
 module.exports = router

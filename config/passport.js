@@ -40,7 +40,7 @@ module.exports = (passport) => {
             }
     
             else{
-                let user = await LabEmployee.findOne({email:email});
+                let user = await LabEmployee.findOne({_id:email});
     
                 if(user){
                     if(user.password != password) return done(null,false);
