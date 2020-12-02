@@ -1,16 +1,13 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const Pool = require('./Pool')
 
 const WellSchema = new Schema({
     _id: {
         type: String,
         maxlength: 50,
     },
-    pool: {
-        type: String,
-        ref: Pool,
-        default: null
+    pool_id: {
+        type: String
     }, 
     testingStartTime: {
         type: Date,
