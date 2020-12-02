@@ -21,16 +21,6 @@ const EmployeeLogin = (props) =>{
 
         console.log("email :" +email + " password "+password)
 
-
-        // fetch("http://localhost:5000/api/employees/login", {
-        //     method: 'POST',
-        //     body:JSON.stringify({email:email,password:password}),
-        //     mode:'cors',
-            
-        //   })
-
-
-
         axios.post("http://localhost:5000/api/employees/login", {
             email: email,
             password: password

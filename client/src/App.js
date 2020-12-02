@@ -16,6 +16,7 @@ import PoolMapping from './components/PoolMapping'
 import EmployeeResult from './components/EmployeeResult.js';
 import Home from './components/Home'
 import LabHome from './components/LabHome'
+import WellTesting from './components/WellTesting'
 
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
           <Route exact path="/poolMapping" component={PoolMapping}/>
           <Route exact path="/employeeResult" component={EmployeeResult}/>
           <Route exact path="/testCollection" component={TestCollection}/>
+          <Route exact path="/wellTesting" component={WellTesting}/>
         </Switch>
       </Router>
     </>
