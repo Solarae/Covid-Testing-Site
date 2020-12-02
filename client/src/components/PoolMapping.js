@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Spinner, Container, ListGroup, ListGroupItem, Row, Table, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Spinner, Container, ListGroup, ListGroupItem, Row, Table, Form, FormGroup, FormText, Label, Input, Button } from 'reactstrap';
 
 class PoolMapping extends Component {
     state = {
@@ -9,7 +9,14 @@ class PoolMapping extends Component {
         isLoading: false,
         selectedPool: null,
         testToAdd: "",
-        poolTestBarcodes: []
+        poolTestBarcodes: [],
+        editPoolMode: false,
+        deletePoolError: null,
+        editPoolError: null,
+        invalidPoolBarcodeError: null,
+        invalidTestBarcodeError: null,
+        deletedTestBarcodes: [],
+        addedTestBarcodes: []
     }
 
     componentDidMount() {
@@ -26,9 +33,8 @@ class PoolMapping extends Component {
              })
      }
  
-    submitPool = (e) => {
-        e.preventDefault()
-        if (this.state.pools.find(pool => pool.poolBarcode === this.state.poolBarcode) !== undefined) {
+    submitPool = () => {
+        if (this.state.editPoolMode) {
             this.updatePool()
         } else {
             this.addPool()
@@ -37,40 +43,53 @@ class PoolMapping extends Component {
 
     updatePool = () => {
         var newPools = JSON.parse(JSON.stringify(this.state.pools))
-        newPools.find((pool) => pool._id === this.state.selectedPool._id)
-                .testBarcodes = this.state.poolTestBarcodes
-        axios.patch(`/api/poolMaps/${this.state.selectedPool._id}`, 
-                { testBarcodes: this.state.poolTestBarcodes } )
-                    .then(res => { 
-                        this.setState( { pools: newPools } )
+        var editedPool = newPools.find((pool) => pool._id === this.state.selectedPool._id)
+        editedPool.testBarcodes = this.state.poolTestBarcodes
+        editedPool._id = this.state.poolBarcode
+        axios.patch(`/api/pools/${this.state.selectedPool._id}`, 
+                { _id: this.state.poolBarcode, testBarcodes: this.state.poolTestBarcodes, well_id:
+                    this.state.selectedPool.well_id, addedTests : this.state.addedTestBarcodes,
+                    deletedTests: this.state.deletedTestBarcodes } )
+                    .then(() => {
+                        this.setState( { pools: newPools, invalidPoolBarcodeError: null, 
+                            deletedTestBarcodes: [], addedTestBarcodes: [], editPoolMode: false,
+                            poolBarcode: '', poolTestBarcodes: [], selectedPool: null,
+                            testToAdd: ''  } )
+                    })
+                    .catch(() => {
+                        this.setState( { invalidPoolBarcodeError: 'A pool with the entered barcode already exists' } )
                     })
     }
 
     addPool = () => {
         const newPool = {
-            poolBarcode: this.state.poolBarcode,
+            _id: this.state.poolBarcode,
             testBarcodes: this.state.poolTestBarcodes
          }
-        axios.post('/api/poolMaps/', newPool).then(res =>
+        axios.post('/api/pools/', newPool).then(res =>
             {
                 this.setState( {
-                    pools: [...this.state.pools, res.data]
+                    pools: [...this.state.pools, res.data], deletedTestBarcodes: [], addedTestBarcodes: [], 
+                    poolBarcode: '', poolTestBarcodes: [], testToAdd: '', invalidPoolBarcodeError: null
                 } )
             })
     }
 
     deletePool = (id) => {
-        axios.delete(`/api/poolMaps/${id}`).then(res =>
-            {
-                this.setState( {
-                    pools: this.state.pools.filter(pool => pool._id !== id)
-                } )
-            })
+        if (this.state.selectedPool.well_id !== null) {
+            this.setState ({deletePoolError: "Cannot delete a Pool that is assigned to a Well"})
+        } else {
+            axios.delete(`/api/pools/${id}`).then(() =>
+                {
+                    this.setState( {
+                        pools: this.state.pools.filter(pool => pool._id !== id)
+                    } )
+                })
+        }
      }
 
     changeRadio = (pool) => {
-        this.setState( { selectedPool: pool, poolBarcode: pool.poolBarcode, 
-            poolTestBarcodes: pool.testBarcodes } )
+        this.setState( { selectedPool: pool, deletePoolError: null, editPoolError: null } )
     }
 
     deletePoolClick = () => {
@@ -78,24 +97,56 @@ class PoolMapping extends Component {
             this.deletePool(this.state.selectedPool._id)
     }
 
+    editPoolClick = () => {
+        if (this.state.selectedPool.well_id !== null) {
+            this.setState ({editPoolError: "Cannot edit a Pool that is assigned to a Well"})
+        } else {
+            this.setState( { poolBarcode: this.state.selectedPool._id, 
+                poolTestBarcodes: this.state.selectedPool.testBarcodes, editPoolMode : true} )
+        }
+    }
+
     toDelete = (testBarcode) => {
         var newPoolTestBarcodes = [...this.state.poolTestBarcodes]
         newPoolTestBarcodes.splice(newPoolTestBarcodes.indexOf(testBarcode),1)
-        this.setState ( {
-            poolTestBarcodes: newPoolTestBarcodes
-        })
+        var newAddedTestBarcodes = [...this.state.addedTestBarcodes]
+        newAddedTestBarcodes = newAddedTestBarcodes.filter(addTest => addTest !== testBarcode)
+        if (this.state.addedTestBarcodes.length === newAddedTestBarcodes.length) {
+            this.setState ( {
+                poolTestBarcodes: newPoolTestBarcodes,
+                deletedTestBarcodes: [...this.state.deletedTestBarcodes, testBarcode]
+            })
+        } else {
+            this.setState ( {
+                poolTestBarcodes: newPoolTestBarcodes,
+                addedTestBarcodes: newAddedTestBarcodes
+            })
+        }
     }
 
     toAdd = (testBarcode) => {
-        var newPoolTestBarcodes = [...this.state.poolTestBarcodes]
-        newPoolTestBarcodes = [...newPoolTestBarcodes, testBarcode]
-        this.setState ( {
-            poolTestBarcodes: newPoolTestBarcodes
-        })
+        if (this.state.poolTestBarcodes.find((testBC) => testBC === testBarcode) === undefined) {
+            axios.get(`/api/tests/${testBarcode}`)
+            .then((res) => {
+                if (res.data !== null) {
+                    var newPoolTestBarcodes = [...this.state.poolTestBarcodes]
+                    newPoolTestBarcodes = [...newPoolTestBarcodes, testBarcode]
+                    this.setState ( {
+                        poolTestBarcodes: newPoolTestBarcodes,
+                        addedTestBarcodes: [...this.state.addedTestBarcodes, testBarcode],
+                        invalidTestBarcodeError: null
+                    })     
+                } else {
+                    this.setState( { invalidTestBarcodeError: 'Test with the given barcode does not exist' } )
+                }   
+            })
+        } else{
+            this.setState( { invalidTestBarcodeError: 'Test Barcode already exists in the Pool' } )
+        }
     }
 
     renderTableHeader() {
-        const header = ["Pool Barcode", "Test Barcode"]
+        const header = ["Pool Barcode", "Test Barcodes"]
         return header.map((hd) => {
             return <th key={`Header ${hd}`}>{hd}</th>
         })
@@ -103,6 +154,7 @@ class PoolMapping extends Component {
 
     renderTableData() {
         return this.state.pools.map((pool) => {
+            console.log(pool)
            return (
               <tr key={pool._id}>
                   <td>
@@ -110,7 +162,7 @@ class PoolMapping extends Component {
                         <Label check>
                             <Input type="radio" checked={this.state.selectedPool !== null && this.state.selectedPool._id === pool._id} 
                                         onChange= {() => this.changeRadio(pool)}/>{' '}
-                            {pool.poolBarcode}
+                            {pool._id}
                         </Label>
                     </FormGroup>
                   </td>
@@ -132,12 +184,13 @@ class PoolMapping extends Component {
                 <Row className="row justify-content-center">
                     <h1>PoolMapping</h1>
                 </Row>
-                <Form onSubmit = {(e) => this.submitPool(e)}>
+                <Form>
                     <Row>
                         <FormGroup>
                             <Label>Pool Barcode:</Label>
                             <Input type="text" value = {this.state.poolBarcode} 
                                     onChange={(e) => this.setState({ poolBarcode: e.target.value })} />
+                            {this.state.invalidPoolBarcodeError != null && <FormText>{this.state.invalidPoolBarcodeError}</FormText>}
                         </FormGroup>
                     </Row>
                     <Row>
@@ -160,10 +213,11 @@ class PoolMapping extends Component {
                             <Input type="text" value = {this.state.testToAdd} 
                                     onChange={(e) => this.setState({ testToAdd: e.target.value })} />
                         <Button onClick = {() => this.toAdd(this.state.testToAdd)}>Add Row</Button>
+                        {this.state.invalidTestBarcodeError != null && <FormText>{this.state.invalidTestBarcodeError}</FormText>}
                     </FormGroup>
                     </Row>
                     <Row>
-                        <Button>Submit Pool</Button>  
+                        <Button onClick={() => this.submitPool()}>Submit Pool</Button>  
                     </Row>
                 </Form>
                 <div>
@@ -172,11 +226,12 @@ class PoolMapping extends Component {
                         <tbody>{this.renderTableData()}</tbody>
                     </Table>
                 </div>
-                <div className="text-center">
-                    <Button onClick={this.deletePoolClick}>
-                        Delete
-                    </Button>
-                </div>    
+                <Row>
+                    <Button onClick={this.editPoolClick}>Edit Pool</Button>
+                    <Button onClick={this.deletePoolClick}>Delete Pool</Button>
+                </Row>
+                {this.state.deletePoolError != null && <div className="text-center"><p>{this.state.deletePoolError}</p></div> }
+                {this.state.editPoolError != null && <div className="text-center"><p>{this.state.editPoolError}</p></div> }     
             </Container>
         )
     }

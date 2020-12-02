@@ -2,11 +2,12 @@ const express = require('express')
 const router = express.Router()
 
 const Pool = require('../../models/Pool')
+const Test = require('../../models/Test')
 
 //@route    GET api/pools
 //@desc     Get All pools In Pool
 router.get('/', (req, res) => {
-    Pool.find().populate('testBarcodes')
+    Pool.find()
         .then(pools => res.json(pools) )
 })
 
@@ -15,9 +16,14 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
     const newPool = new Pool({
         _id: req.body._id,
-        testBarcodes: req.body.testBarcodes
+        testBarcodes: req.body.testBarcodes,
+        well_id: req.body.well_id
     })
-    newPool.save().then(pool => res.json(pool))
+    newPool.save().then((pool) => {res.json(pool)})
+    Test.updateMany(
+        { _id: { $in: req.body.testBarcodes } },
+        { $push: { pools : req.body._id } }
+     )
 });
 
 //@route    Delete api/pools/id
@@ -27,5 +33,60 @@ router.delete('/:id', (req, res) => {
         .then(pool => pool.remove().then(() => res.json({success : true})))
         .catch(error => res.status(404).json({success : false}))
 })
+
+//@route    Patch api/pools/id
+//@desc     Patch a pool from Pool
+router.patch('/:id', (req, res) => {
+    Pool.findById(req.body._id)
+        .then(pool => {
+            if (pool !== null && req.params.id !== req.body._id) {
+                throw new Error('Invalid Pool Barcode')
+            } else {
+                if (req.params.id !== req.body._id) {
+                        Pool.findById(req.params.id)
+                        .then(pool => pool.remove()
+                            .then(() => {
+                                const newPool = new Pool({
+                                    _id: req.body._id,
+                                    testBarcodes: req.body.testBarcodes,
+                                    well_id: req.body.well_id
+                                })
+                                newPool.save()
+                                    .then(() => {
+                                        Test.updateMany(
+                                            { _id: { $in: req.body.testBarcodes } },
+                                            {  $push: { pools : req.body._id } }
+                                         ).then(() => {
+                                            Test.updateMany(
+                                                { _id: { $in: req.body.testBarcodes } },
+                                                { $pull: { pools : req.params.id } }
+                                             ).then(() => {
+                                                Test.updateMany(
+                                                    { _id: { $in: req.body.deletedTests } },
+                                                    { $pull: { pools : req.body._id } }
+                                                ).then((data) => res.json(data))
+                                                })
+                                            })
+                                        })
+                                    })
+                                    )
+                                } else {
+                                    Pool.findByIdAndUpdate(req.params.id, {$set: {testBarcodes: req.body.testBarcodes}} )
+                                        .then(() => {
+                                            Test.updateMany(
+                                                { _id: { $in: req.body.addedTests } },
+                                                { $push: { pools : req.body._id } },
+                                                ).then(() => {
+                                                    Test.updateMany(
+                                                        { _id: { $in: req.body.deletedTests } },
+                                                        { $pull: { pools : req.body._id } },
+                                                        ).then((data) => res.json(data))
+                                                    })
+                                                })
+                                            }
+                                        }
+                                    })
+                                    .catch(error => res.status(404).json({success : false}))
+                                })
 
 module.exports = router

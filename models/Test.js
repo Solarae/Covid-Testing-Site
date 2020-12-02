@@ -6,10 +6,9 @@ const TestSchema = new Schema({
         type: String,
         maxlength: 50,
     },
-    poolBarcode: {
-        type: String,
-        maxlength: 50,
-        default: null
+    pools: {
+        type: [String],
+        default: []
     },
     employeeID: {
         type: String,
