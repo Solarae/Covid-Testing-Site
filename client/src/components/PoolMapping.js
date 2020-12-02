@@ -13,6 +13,7 @@ class PoolMapping extends Component {
         editPoolMode: false,
         deletePoolError: null,
         editPoolError: null,
+        invalidPoolBarcodeError: null,
         deletedTestBarcodes: [],
         addedTestBarcodes: []
     }
@@ -48,8 +49,11 @@ class PoolMapping extends Component {
                 { _id: this.state.poolBarcode, testBarcodes: this.state.poolTestBarcodes, well_id:
                     this.state.selectedPool.well_id, addedTests : this.state.addedTestBarcodes,
                     deletedTests: this.state.deletedTestBarcodes } )
-                    .then(() => { 
+                    .then(() => {
                         this.setState( { pools: newPools } )
+                    })
+                    .catch(() => {
+                        this.setState( { invalidPoolBarcodeError: 'A pool with the entered barcode already exists' } )
                     })
     }
 
@@ -168,6 +172,7 @@ class PoolMapping extends Component {
                             <Label>Pool Barcode:</Label>
                             <Input type="text" value = {this.state.poolBarcode} 
                                     onChange={(e) => this.setState({ poolBarcode: e.target.value })} />
+                            {this.state.deletePoolError != null && <FormText>{this.state.invalidPoolBarcodeError}</FormText>}
                         </FormGroup>
                     </Row>
                     <Row>
