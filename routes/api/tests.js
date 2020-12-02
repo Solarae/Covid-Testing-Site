@@ -10,6 +10,14 @@ router.get('/', (req, res) => {
         .then(tests => res.json(tests) )
 })
 
+//@route    GET api/tests/id
+//@desc     Get the test with given id
+router.get('/:id', (req, res) => {
+    Test.findById(req.params.id)
+        .then(test => res.json(test) )
+        .catch(error => res.status(404).json({success : false}))
+})
+
 //@route    POST api/tests
 //@desc     Add test to Test
 router.post('/', (req, res) => {
@@ -46,5 +54,12 @@ router.get('/:employeeID', async (req, res) => {
 
 
 
+
+router.patch('/', (req, res) => {
+    Test.updateMany(
+        { _id: { $in: req.body.testBarcodes } },
+        { $push: { pools : req.body._id } }
+     ).then(() => res.json({success : false}))
+})
 
 module.exports = router
