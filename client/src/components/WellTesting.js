@@ -5,6 +5,7 @@ const WellTesting = () =>{
 
     const [poolBarcode,setPoolBarcode] = useState("");
     const [wellBarcode,setWellBarcode] = useState("");
+    const [radioID,setRadioID] = useState("");
     const [data,setData] = useState([]);
     const[result,setResult] = useState("inprogress");
 
@@ -16,10 +17,12 @@ const WellTesting = () =>{
 
 
     const getData = async () =>{
-        let results = await axios.get("/api/wells");
+        let results = await axios.get("/api/wells")
         console.log(results)
 
         if(results.data) setData(results.data)
+
+
     }
 
 
@@ -29,15 +32,28 @@ const WellTesting = () =>{
         e.preventDefault()
         let response = await axios.post("/api/wells",{
             _id:wellBarcode,
-            pool:poolBarcode,
+            pool_id:poolBarcode,
             testingStartTime:new Date(),
             result:result,
 
 
         },{withCredentials:true});
         
+        window.location.reload();
 
-        console.log(response)
+    }
+
+
+
+    const handleEdit = () =>{
+        console.log(radioID)
+    }
+
+    const handleDelete =  () =>{
+        console.log(radioID)
+
+        axios.delete(`/api/wells/${radioID}`);
+        window.location.reload();
 
     }
 
@@ -90,17 +106,12 @@ const WellTesting = () =>{
                         <Button>Add</Button>  
                     </Row>
                 </Form>
-                <div className="text-center">
-                    <Button >
-                        Delete
-                    </Button>
-                </div>
-
 
 
                <Table>
                     <thead>
                         <tr>
+
                             <th>Well barcode</th>
                             <th>Pool barcode</th>
                             <th>Result</th>
@@ -112,8 +123,8 @@ const WellTesting = () =>{
 
                             <>
                                 <tr>
-                                    <td>{element._id}</td>
-                                    <td>{element.poolBarcode}</td>
+                                    <td><Input type="radio" id={element._id} onChange={(e)=> setRadioID(e.target.id)} name="radioButton"/>{element._id}</td>
+                                    <td>{element.pool_id}</td>
                                     <td>{element.result}</td>
                                 </tr>
                             </>
@@ -122,7 +133,21 @@ const WellTesting = () =>{
 
                 </Table>
 
+                
 
+
+                <div className="text-center">
+                    <Button onClick={handleEdit}>
+                        Edit
+                    </Button>
+                </div>
+
+
+                <div className="text-center">
+                    <Button onClick={handleDelete}>
+                        Delete
+                    </Button>
+                </div>
 
 
 

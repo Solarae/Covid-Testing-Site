@@ -89,4 +89,13 @@ router.patch('/:id', (req, res) => {
                                     .catch(error => res.status(404).json({success : false}))
                                 })
 
+
+
+//@route    GET api/pools/:id
+//@desc     Get pool based on ID
+router.get('/:id', (req, res) => {
+    Pool.findById(req.params.id)
+        .then(pools => res.json(pools) )
+})
+
 module.exports = router

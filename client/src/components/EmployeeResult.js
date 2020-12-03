@@ -23,9 +23,31 @@ const EmployeeResult = () =>{
 
 
         //get all the tests in which this employee has
-        let tests = await axios.get("api/tests/113222636",{withCredentials:true})
+        let tests = await axios.get("/api/tests/getTests/112222636",{withCredentials:true})
+        // if (tests.data) setTest(tests.data)
+
+
+        //for each test, find the pools they are in and for each pools,find the well and get result
+        tests.data.forEach(element => {
+            element.pools.forEach(async (pool)=>{
+                //make api call for the given pool to get the well
+                let res = await axios.get(`/api/pools/${pool}`)
+                console.log("pool "+pool +" has well id "+res.data.well_id)
+
+
+                //with the well we got, find the well and get result
+                let well = await axios.get(`/api/wells/${res.data.well_id}`)
+                let finalResult = well.data ? well.data.result:null
+                console.log(finalResult)
+                element.result = finalResult ? finalResult:"Not assigned"
+
+            })
+        });
+
+
         setTest(tests.data)
-        console.log(tests.data)
+
+
     }
 
 
