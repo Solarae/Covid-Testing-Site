@@ -29,4 +29,23 @@ router.delete('/:id', (req, res) => {
         .catch(error => res.status(404).json({success : false}))
 })
 
+
+
+//@route    Get api/employeeTests/:employeeID
+//@desc     Get all testBarcodes from an employee
+
+router.get('/getTestBarcodes/:employeeID',async (req,res) => {
+    console.log("ID      "+req.params.employeeID);
+    let result = await EmployeeTest.findOne({employeeID:req.params.employeeID});
+
+    let testBarcodes = result.testBarcodes;
+
+    console.log(testBarcodes);    
+
+    res.send(testBarcodes);
+
+
+})
+
+
 module.exports = router
