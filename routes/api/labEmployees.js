@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const passport = require('passport')
 
 const LabEmployee = require('../../models/LabEmployee')
 
@@ -14,7 +15,7 @@ router.get('/', (req, res) => {
 //@desc     Add an labEmployee to LabEmployee
 router.post('/', (req, res) => {
     const newLabEmployee = new LabEmployee({
-        _id: req.body._id,
+        _id: req.body.employeeID,
         password: req.body.password
     })
     newLabEmployee.save().then(labEmployee => res.json(labEmployee))
@@ -27,5 +28,23 @@ router.delete('/:id', (req, res) => {
         .then(labEmployee => labEmployee.remove().then(() => res.json({success : true})))
         .catch(error => res.status(404).json({success : false}))
 })
+
+
+//@route    POST api/labEmployees/login
+//@desc     Logs in a user
+router.post("/login", (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+      if (err) throw err;
+      if (!user) res.send(null);
+      else {
+        req.logIn(user, (err) => {
+          if (err) throw err;
+          res.send(user);
+          console.log(req.user);
+        });
+      }
+    })(req, res, next);
+  });
+
 
 module.exports = router
