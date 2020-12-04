@@ -16,7 +16,7 @@ class TestCollection extends Component {
      }
  
      getTests = () => {
-         axios.get('/api/employeeTests').then(res =>
+         axios.get('/api/tests').then(res =>
              {
                  this.setState( {
                      isLoading: false,
@@ -29,10 +29,9 @@ class TestCollection extends Component {
          const newTest = {
             testBarcode: this.state.testBarcode,
             employeeID: this.state.employeeID,
-            collectionTime: Date.now(),
-            collectedBy: "Singwa"
+            collectionTime: Date.now()
          }
-         axios.post('/api/employeeTests', newTest).then(res =>
+         axios.post('/api/tests', newTest).then(res =>
              {
                  if (res.status !== "404") {
                     this.setState( {
@@ -43,7 +42,7 @@ class TestCollection extends Component {
      }
  
      deleteTest = (id, newTests, tempNewTests) => {
-         axios.delete(`/api/employeeTests/${id}`).then(res =>
+         axios.delete(`/api/tests/${id}`).then(res =>
              {
                  if (res.status === "404")
                     newTests = tempNewTests
@@ -77,7 +76,7 @@ class TestCollection extends Component {
     }
 
     renderTableHeader() {
-        const header = ["Checkbox", "Employee ID", "Test Barcode"]
+        const header = ["Employee ID", "Test Barcode"]
         return header.map((hd) => {
             return <th key={`Header ${hd}`}>{hd}</th>
         })
