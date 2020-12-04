@@ -5,7 +5,7 @@ const WellTesting = () =>{
 
     const [poolBarcode,setPoolBarcode] = useState("");
     const [wellBarcode,setWellBarcode] = useState("");
-    const [radioID,setRadioID] = useState("");
+    const [selected,setSelected] = useState([]);
     const [data,setData] = useState([]);
     const[result,setResult] = useState("inprogress");
 
@@ -46,13 +46,15 @@ const WellTesting = () =>{
 
 
     const handleEdit = () =>{
-        console.log(radioID)
+        console.log(selected)
+        setWellBarcode(selected[0])
+        setPoolBarcode(selected[1])
+
+        
     }
 
     const handleDelete =  () =>{
-        console.log(radioID)
-
-        axios.delete(`/api/wells/${radioID}`);
+        axios.delete(`/api/wells/${selected[0]}`);
         window.location.reload();
 
     }
@@ -74,7 +76,7 @@ const WellTesting = () =>{
                     <Row>
                         <FormGroup>
                             <Label>Well Barcode:</Label>
-                            <Input type="text"
+                            <Input type="text" value={wellBarcode}
                                     onChange={(e) => setWellBarcode(e.target.value)} />
                         </FormGroup>
                     </Row>
@@ -82,7 +84,7 @@ const WellTesting = () =>{
                     <Row>
                         <FormGroup>
                             <Label>Pool Barcode:</Label>
-                            <Input type="text" 
+                            <Input type="text" value={poolBarcode}
                                     onChange={(e) => setPoolBarcode(e.target.value)} />
                         </FormGroup>
                     </Row>
@@ -123,7 +125,7 @@ const WellTesting = () =>{
 
                             <>
                                 <tr>
-                                    <td><Input type="radio" id={element._id} onChange={(e)=> setRadioID(e.target.id)} name="radioButton"/>{element._id}</td>
+                                    <td><Input type="radio" id={element._id} onChange={(e)=> setSelected([e.target.id,e.target.getAttribute('poolBarcode')])} name="radioButton"  poolbarcode={element.pool_id}    />{element._id}</td>
                                     <td>{element.pool_id}</td>
                                     <td>{element.result}</td>
                                 </tr>

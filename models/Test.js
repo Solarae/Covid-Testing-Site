@@ -18,11 +18,6 @@ const TestSchema = new Schema({
     collectionTime: {
         type: Date,
         required: true
-    },
-    result: {
-        type: String, 
-        enum: ['inprogress', 'negative', 'positive', 'unassigned'],
-        default: 'unassigned'
     }
 })
 
