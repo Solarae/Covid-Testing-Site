@@ -22,15 +22,15 @@ router.post('/', (req, res) => {
                 testBarcodes: req.body.testBarcodes,
                 well_id: req.body.well_id
             })
-            newPool.save()
-        })            
+            return newPool.save()
+        })
         .then((pool) => res.json(pool))
         .then(() => {
-            Test.updateMany(
+            return Test.updateMany(
                 { _id: { $in: req.body.testBarcodes } },
                 { $push: { pools : req.body._id } }
              )
-        })
+        })  
         .catch(error => res.status(404).json({success : false}))
 });
 
@@ -59,21 +59,21 @@ router.patch('/:id', (req, res) => {
                                     testBarcodes: req.body.testBarcodes,
                                     well_id: req.body.well_id
                                 })
-                                newPool.save()
+                                return newPool.save()
                             })
                         .then((pool) => res.json(pool))
                         .then(() => {
-                                Test.updateMany(
+                                return Test.updateMany(
                                     { _id: { $in: req.body.testBarcodes } },
                                     {  $push: { pools : req.body._id } }
                                          )})
                         .then(() => {
-                                Test.updateMany(
+                                return Test.updateMany(
                                     { _id: { $in: req.body.testBarcodes } },
                                     { $pull: { pools : req.params.id } }
                                         )})
                         .then(() => {
-                                Test.updateMany(
+                                return Test.updateMany(
                                     { _id: { $in: req.body.deletedTests } },
                                     { $pull: { pools : req.body._id } }
                                                 )})
@@ -81,14 +81,14 @@ router.patch('/:id', (req, res) => {
                     Pool.findByIdAndUpdate(req.params.id, {$set: {testBarcodes: req.body.testBarcodes}} )
                         .then((pool) => res.json(pool))
                         .then(() => {
-                            Test.updateMany(
-                                { _id: { $in: req.body.addedTests } },
-                                { $push: { pools : req.body._id } }
+                                return Test.updateMany(
+                                    { _id: { $in: req.body.addedTests } },
+                                    { $push: { pools : req.body._id } }
                                         )})
                         .then(() => {
-                            Test.updateMany(
-                                { _id: { $in: req.body.deletedTests } },
-                                { $pull: { pools : req.body._id } }
+                                return Test.updateMany(
+                                    { _id: { $in: req.body.deletedTests } },
+                                    { $pull: { pools : req.body._id } }
                                         )})
                     }
                 }
