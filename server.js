@@ -55,7 +55,14 @@ app.use(
 );
 
 
-
+// Error Middleware
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({
+      status: err.status,
+      message: error.message,
+      type: err.type
+  })
+})
 
 const router=require('./routes/api')
 app.use('/api',router);

@@ -24,14 +24,15 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
     Test.findById(req.body._id)
         .then((test) => {
-            if (test != null) throw new Error(`Test with the id ${req.body._id} already exists`)
-            
+            if (test != null) res.status(404).json({message : 'A Test with the given barcode already exists',
+                    type: "Test Barcode"})
         })
         .then(() => {
             return Employee.findById(req.body.employeeID)
         })
         .then((employee) => {
-            if (employee === null) throw new Error(`Employee with the id ${req.body.employeeID} doesn't exist`)  
+            if (employee === null) res.status(404).json({message : `An Employee with the given ID doesn't exist`,
+            type: "Employee ID"}) 
         })
         .then(() => {
             const newTest = new Test({
@@ -42,7 +43,6 @@ router.post('/', (req, res) => {
             return newTest.save()
         })
         .then(test => res.json(test))
-        .catch(error => res.status(404).json({success : false}))
     })
 
 //@route    Delete api/tests/id

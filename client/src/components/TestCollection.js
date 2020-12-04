@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Spinner, Container, Row, Table, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Spinner, Container, Row, Table, Form, FormGroup, FormText, Label, Input, Button } from 'reactstrap';
 
 class TestCollection extends Component {
     state = {
@@ -10,7 +10,8 @@ class TestCollection extends Component {
         tests: [],
         selectedTest: null,
         deleteTestError: null,
-        employeeIDError: null
+        employeeIDError: null,
+        testBarcodeError: null
     }
 
     componentDidMount() {
@@ -27,19 +28,29 @@ class TestCollection extends Component {
              })
     }
  
-    addTest = () => {
-         const newTest = {
+    addTest = (e) => {
+        e.preventDefault()
+        const newTest = {
             testBarcode: this.state.testBarcode,
             employeeID: this.state.employeeID,
             collectionTime: Date.now()
-         }
-         axios.post('/api/tests', newTest).then(res =>
-            {
-                if (res.status !== "404") {
-                    this.setState( {
-                        tests: [...this.state.tests, res.data]
-                    } )
-                } 
+        }
+        axios.post('/api/tests', newTest).then(res =>
+            { 
+                this.setState( {
+                    tests: [...this.state.tests, res.data]
+                } )
+            })
+            .catch(error => {
+                if (error.response.data.type === "Employee ID") {
+                    this.setState ({
+                        employeeIDError: error.response.data.message
+                    })
+                } else {
+                    this.setState ({
+                        testBarcodeError: error.response.data.message
+                    })
+                }
             })
         }
  
@@ -122,6 +133,7 @@ class TestCollection extends Component {
                             <Label>Employee ID:</Label>
                             <Input type="text" value = {this.state.employeeID} 
                                     onChange={(e) => this.setState({ employeeID: e.target.value })} />
+                            {this.state.employeeIDError != null && <FormText>{this.state.employeeIDError}</FormText>}
                         </FormGroup>
                     </Row>
                     <Row>
@@ -129,6 +141,7 @@ class TestCollection extends Component {
                             <Label>Test Barcode:</Label>
                             <Input type="text" value = {this.state.testBarcode} 
                                 onChange={(e) => this.setState({ testBarcode: e.target.value })} />
+                            {this.state.testBarcodeError != null && <FormText>{this.state.testBarcodeError}</FormText>}
                         </FormGroup>
                     </Row>
                     <Row>
