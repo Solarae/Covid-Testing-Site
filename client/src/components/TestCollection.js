@@ -6,17 +6,17 @@ class TestCollection extends Component {
     state = {
         employeeID: "",
         testBarcode: "",
-        tests: [],
         isLoading: false,
-        toDelete: [],
-        selectedTest: null
+        tests: [],
+        selectedTest: null,
+        deleteTestError: null
     }
 
     componentDidMount() {
         this.getTests();
      }
  
-     getTests = () => {
+    getTests = () => {
          axios.get('/api/tests').then(res =>
              {
                  this.setState( {
@@ -24,31 +24,42 @@ class TestCollection extends Component {
                      tests: res.data
                  } )
              })
-     }
+    }
  
-     addTest = () => {
+    addTest = () => {
          const newTest = {
             testBarcode: this.state.testBarcode,
             employeeID: this.state.employeeID,
             collectionTime: Date.now()
          }
          axios.post('/api/tests', newTest).then(res =>
-             {
-                 if (res.status !== "404") {
+            {
+                if (res.status !== "404") {
                     this.setState( {
-                        tests: [res.data, ...this.state.tests]
+                        tests: [...this.state.tests, res.data]
                     } )
-                 } 
-             })
-     }
+                } 
+            })
+        }
  
-     deleteTest = (id, newTests, tempNewTests) => {
-         axios.delete(`/api/tests/${id}`).then(res =>
-             {
-                 if (res.status === "404")
-                    newTests = tempNewTests
-             })
+    deleteTest = (id) => {
+        if (this.state.selectedTest.pools.length === 0) {
+            axios.delete(`/api/tests/${id}`).then(res =>
+                {
+                    this.setState( {tests: this.state.tests.filter(test => test._id !== this.state.selectedTest._id)})
+                })
+            } else {
+                this.setState ({deleteTestError: "Cannot delete a Test that is assigned to a Pool"})
+            }
+        }
+
+    
+    deleteClick = () => {
+        if (this.state.selectedTest != null) {
+            this.deleteTest(this.state.selectedTest._id)
+        }
     }
+
 
     changeRadio = (test) => {
         this.setState( { selectedTest: test} )
@@ -64,20 +75,6 @@ class TestCollection extends Component {
                 toDelete: this.state.toDelete.splice(this.state.toDelete.indexOf(id), 1)
             } )
         }
-    }
-
-    deleteClick = () => {
-        var newTests = this.state.tests;
-        var tempNewTests
-        this.state.toDelete.forEach(id => {
-            tempNewTests = newTests
-            newTests = newTests.filter(test => test._id !== id)
-            this.deleteTest(id, newTests, tempNewTests)
-        })
-        this.setState( {
-            toDelete: [],
-            tests: newTests
-        } )
     }
 
     renderTableHeader() {
@@ -148,6 +145,7 @@ class TestCollection extends Component {
                         Delete
                     </Button>
                 </div>
+                {this.state.deleteTestError != null && <div className="text-center"><p>{this.state.deleteTestError}</p></div> }
             </Container>
         )
     }
