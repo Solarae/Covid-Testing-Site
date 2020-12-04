@@ -8,7 +8,8 @@ class TestCollection extends Component {
         testBarcode: "",
         tests: [],
         isLoading: false,
-        toDelete: []
+        toDelete: [],
+        selectedTest: null
     }
 
     componentDidMount() {
@@ -47,7 +48,11 @@ class TestCollection extends Component {
                  if (res.status === "404")
                     newTests = tempNewTests
              })
-     }
+    }
+
+    changeRadio = (test) => {
+        this.setState( { selectedTest: test} )
+    }
 
     handleCheckClick = (id, e) => {
         if (e.target.checked) {
@@ -83,16 +88,19 @@ class TestCollection extends Component {
     }
 
     renderTableData() {
-        return this.state.tests.map(({_id, employeeID, testBarcode}, index) => {
+        return this.state.tests.map((test) => {
            return (
-              <tr key={_id}>
+              <tr key={test._id}>
                 <td>
                     <FormGroup check>
-                        <Input type="checkbox" onChange={this.handleCheckClick.bind(this,_id)}/>
+                        <Label check>
+                        <Input type="radio" checked={this.state.selectedTest !== null && this.state.selectedTest._id === test._id} 
+                                        onChange= {() => this.changeRadio(test)}/>{' '}
+                        {test.employeeID}
+                        </Label>
                     </FormGroup>
-                 </td>
-                 <td>{employeeID}</td>
-                 <td>{testBarcode}</td>
+                </td>
+                 <td>{test._id}</td>
               </tr>
            )
         })
