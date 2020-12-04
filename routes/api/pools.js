@@ -29,8 +29,9 @@ router.post('/', (req, res) => {
             Test.updateMany(
                 { _id: { $in: req.body.testBarcodes } },
                 { $push: { pools : req.body._id } }
-             ).then(() => {res.json({success: true})})
+             )
         })
+        .catch(error => res.status(404).json({success : false}))
 });
 
 //@route    Delete api/pools/id
