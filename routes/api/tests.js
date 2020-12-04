@@ -22,7 +22,14 @@ router.get('/:id', (req, res) => {
 //@route    POST api/tests
 //@desc     Add test to Test
 router.post('/', (req, res) => {
-    Employee.findById(req.body.employeeID)
+    Test.findById(req.body._id)
+        .then((test) => {
+            if (test != null) throw new Error(`Test with the id ${req.body._id} already exists`)
+            
+        })
+        .then(() => {
+            return Employee.findById(req.body.employeeID)
+        })
         .then((employee) => {
             if (employee === null) throw new Error(`Employee with the id ${req.body.employeeID} doesn't exist`)  
         })
@@ -32,8 +39,10 @@ router.post('/', (req, res) => {
                 employeeID: req.body.employeeID,
                 collectionTime: req.body.collectionTime,
             })
-            newTest.save().then(test => res.json(test))
+            return newTest.save()
         })
+        .then(test => res.json(test))
+        .catch(error => res.status(404).json({success : false}))
     })
 
 //@route    Delete api/tests/id
