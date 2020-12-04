@@ -73,6 +73,9 @@ class PoolMapping extends Component {
                     poolBarcode: '', poolTestBarcodes: [], testToAdd: '', invalidPoolBarcodeError: null
                 } )
             })
+            .catch(() => {
+                this.setState( { invalidPoolBarcodeError: 'A pool with the entered barcode already exists' } )
+            })
     }
 
     deletePool = (id) => {
