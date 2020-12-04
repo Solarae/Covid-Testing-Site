@@ -9,7 +9,8 @@ class TestCollection extends Component {
         isLoading: false,
         tests: [],
         selectedTest: null,
-        deleteTestError: null
+        deleteTestError: null,
+        employeeIDError: null
     }
 
     componentDidMount() {

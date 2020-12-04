@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const Test = require('../../models/Test')
+const Employee = require('../../models/Employee')
 
 //@route    GET api/tests
 //@desc     Get All Tests In Test
@@ -21,16 +22,19 @@ router.get('/:id', (req, res) => {
 //@route    POST api/tests
 //@desc     Add test to Test
 router.post('/', (req, res) => {
-    const newTest = new Test({
-        _id: req.body._id,
-        poolBarcode: req.body.poolBarcode,
-        employeeID: req.body.employeeID,
-        collectionTime: req.body.collectionTime,
-        result: req.body.result
+    Employee.findById(req.body.employeeID)
+        .then((employee) => {
+            if (employee === null) throw new Error(`Employee with the id ${req.body.employeeID} doesn't exist`)  
+        })
+        .then(() => {
+            const newTest = new Test({
+                _id: req.body._id,
+                employeeID: req.body.employeeID,
+                collectionTime: req.body.collectionTime,
+            })
+            newTest.save().then(test => res.json(test))
+        })
     })
-    newTest.save().then(test => res.json(test))
-        
-});
 
 //@route    Delete api/tests/id
 //@desc     Delete a test from Test
