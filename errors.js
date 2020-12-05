@@ -26,4 +26,4 @@ class InvalidEmployeeIDError extends Error {
     }
   }
 
-module.exports = { InvalidEmployeeIDError, InvalidTestBarcodeError }
+module.exports = { InvalidTestBarcodeError, InvalidEmployeeIDError }

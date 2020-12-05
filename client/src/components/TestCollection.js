@@ -42,7 +42,6 @@ class TestCollection extends Component {
                 } )
             })
             .catch(error => {
-                console.log(error.response.data.type)
                 if (error.response.data.type === "InvalidEmployeeIDError") {
                     this.setState ({
                         employeeIDError: error.response.data.message
