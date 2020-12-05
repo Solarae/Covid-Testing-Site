@@ -26,4 +26,18 @@ class InvalidEmployeeIDError extends Error {
     }
   }
 
-module.exports = { InvalidTestBarcodeError, InvalidEmployeeIDError }
+class InvalidPoolBarcodeError extends Error {
+  constructor(message, status) {
+      super(message)
+      
+      if (Error.captureStackTrace) {
+        Error.captureStackTrace(this, InvalidPoolBarcodeError)
+      }
+
+      this.name = 'InvalidPoolBarcodeError'
+      this.status = status
+
+    }
+  }
+
+module.exports = { InvalidTestBarcodeError, InvalidEmployeeIDError, InvalidPoolBarcodeError }

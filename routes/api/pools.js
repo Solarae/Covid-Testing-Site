@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 
 //@route    POST api/pools
 //@desc     Add pool to Pool
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
     Pool.findById(req.body._id)
         .then(pool => { if (pool != null) throw new Error(`Pool with barcode ${req.body._id} already exists`)})
         .then(() => {
@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
                 { $push: { pools : req.body._id } }
              )
         })  
-        .catch(error => res.status(404).json({success : false}))
+        .catch(next)
 });
 
 //@route    Delete api/pools/id
@@ -44,7 +44,7 @@ router.delete('/:id', (req, res) => {
 
 //@route    Patch api/pools/id
 //@desc     Patch a pool from Pool
-router.patch('/:id', (req, res) => {
+router.patch('/:id', (req, res, next) => {
     Pool.findById(req.body._id)
         .then(pool => {
             if (pool !== null && req.params.id !== req.body._id) {
@@ -93,7 +93,7 @@ router.patch('/:id', (req, res) => {
                     }
                 }
             })
-            .catch(error => res.status(404).json({success : false}))
+            .catch(next)
         })
                                 
 module.exports = router
