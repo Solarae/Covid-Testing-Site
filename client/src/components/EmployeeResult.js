@@ -5,7 +5,7 @@ import { Table } from 'reactstrap';
 const EmployeeResult = () =>{
 
     const [test,setTest] = useState([]);
-    const [user,setUser] = useState("");
+    const [user,setUser] = useState({});
 
 
     useEffect(() =>{
@@ -23,16 +23,21 @@ const EmployeeResult = () =>{
 
 
         //get all the tests in which this employee has
-        let tests = await axios.get("/api/tests/getTests/112222636",{withCredentials:true})
+        console.log(user)
+        let tests = await axios.get(`/api/tests/getTests/${userInfo.data._id}`,{withCredentials:true})
         // if (tests.data) setTest(tests.data)
 
+        console.log(tests)
 
         //for each test, find the pools they are in and for each pools,find the well and get result
         tests.data.forEach(element => {
             element.pools.forEach(async (pool)=>{
+                console.log("checking for pool "+pool)
                 //make api call for the given pool to get the well
                 let res = await axios.get(`/api/pools/${pool}`)
-                console.log("pool "+pool +" has well id "+res.data.well_id)
+                console.log("well that this pool got :")
+                console.log(res.data)
+                console.log("pool "+pool +" has well "+res.data.well_id)
 
 
                 //with the well we got, find the well and get result
