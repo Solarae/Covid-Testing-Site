@@ -72,8 +72,8 @@ router.get('/:employeeID', async (req, res) => {
 router.patch('/', (req, res) => {
     Test.updateMany(
         { _id: { $in: req.body.testBarcodes } },
-        { $push: { pools : req.body._id } }
-     ).then(() => res.json({success : false}))
+        { $pull: { pools : req.body._id } }
+     ).then((tests) => res.json(tests))
 })
 
 module.exports = router

@@ -40,7 +40,14 @@ router.post('/', (req, res, next) => {
 //@desc     Delete a pool from Pool
 router.delete('/:id', (req, res) => {
     Pool.findById(req.params.id)
-        .then(pool => pool.remove().then(() => res.json({success : true})))
+        .then(pool =>  pool.remove() )
+        .then((deletedPool) => {
+            return Test.updateMany(
+                { _id: { $in: deletedPool.testBarcodes } },
+                { $pull: { pools : deletedPool._id } }
+             )
+        })
+        .then(() => res.json({success: true})) 
         .catch(error => res.status(404).json({success : false}))
 })
 
