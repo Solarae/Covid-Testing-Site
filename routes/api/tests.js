@@ -2,6 +2,9 @@ const express = require('express')
 const router = express.Router()
 
 const Test = require('../../models/Test')
+const Employee = require('../../models/Employee')
+
+const { InvalidTestBarcodeError, InvalidEmployeeIDError } = require('../../errors')
 
 //@route    GET api/tests
 //@desc     Get All Tests In Test
@@ -20,17 +23,28 @@ router.get('/:id', (req, res) => {
 
 //@route    POST api/tests
 //@desc     Add test to Test
-router.post('/', (req, res) => {
-    const newTest = new Test({
-        _id: req.body._id,
-        poolBarcode: req.body.poolBarcode,
-        employeeID: req.body.employeeID,
-        collectionTime: req.body.collectionTime,
-        result: req.body.result
+router.post('/', (req, res, next) => {
+    Test.findById(req.body._id)
+        .then((test) => {
+            if (test != null) throw new InvalidTestBarcodeError('A Test with the given barcode already exists', 404)
+        })
+        .then(() => {
+            return Employee.findById(req.body.employeeID)
+        })
+        .then((employee) => {
+            if (employee === null) throw new InvalidEmployeeIDError('An Employee with the given ID does not exist', 404)
+        })
+        .then(() => {
+            const newTest = new Test({
+                _id: req.body._id,
+                employeeID: req.body.employeeID,
+                collectionTime: req.body.collectionTime,
+            })
+            return newTest.save()
+        })
+        .then(test => res.json(test))
+        .catch(next)
     })
-    newTest.save().then(test => res.json(test))
-        
-});
 
 //@route    Delete api/tests/id
 //@desc     Delete a test from Test

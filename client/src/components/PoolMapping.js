@@ -56,8 +56,8 @@ class PoolMapping extends Component {
                             poolBarcode: '', poolTestBarcodes: [], selectedPool: null,
                             testToAdd: ''  } )
                     })
-                    .catch(() => {
-                        this.setState( { invalidPoolBarcodeError: 'A pool with the entered barcode already exists' } )
+                    .catch((error) => {
+                        this.setState( { invalidPoolBarcodeError: error.response.data.message } )
                     })
     }
 
@@ -73,8 +73,8 @@ class PoolMapping extends Component {
                     poolBarcode: '', poolTestBarcodes: [], testToAdd: '', invalidPoolBarcodeError: null
                 } )
             })
-            .catch(() => {
-                this.setState( { invalidPoolBarcodeError: 'A pool with the entered barcode already exists' } )
+            .catch((error) => {
+                this.setState( { invalidPoolBarcodeError: error.response.data.message } )
             })
     }
 
@@ -143,7 +143,7 @@ class PoolMapping extends Component {
                     this.setState( { invalidTestBarcodeError: 'Test with the given barcode does not exist' } )
                 }   
             })
-        } else{
+        } else {
             this.setState( { invalidTestBarcodeError: 'Test Barcode already exists in the Pool' } )
         }
     }
