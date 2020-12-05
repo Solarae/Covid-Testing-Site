@@ -38,4 +38,12 @@ router.get('/:id', (req, res) => {
         .then(wells => res.json(wells) )
 })
 
+
+//@route    PUT api/wells/:id
+//@desc     Update wells based on ID
+router.put('/edit/:id', (req, res) => {
+
+    Well.updateOne({_id:req.params.id} , {$set:{result:req.body.result}})
+        .then(wells => res.json(wells))
+})
 module.exports = router
