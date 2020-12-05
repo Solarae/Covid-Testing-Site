@@ -38,7 +38,9 @@ class TestCollection extends Component {
         axios.post('/api/tests', newTest).then(res =>
             { 
                 this.setState( {
-                    tests: [...this.state.tests, res.data]
+                    tests: [...this.state.tests, res.data],
+                    employeeID: '',
+                    testBarcode: ''
                 } )
             })
             .catch(error => {
