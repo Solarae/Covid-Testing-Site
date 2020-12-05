@@ -30,14 +30,13 @@ const EmployeeResult = () =>{
         console.log(tests)
 
         //for each test, find the pools they are in and for each pools,find the well and get result
-        tests.data.forEach(element => {
-            element.pools.forEach(async (pool)=>{
+        await Promise.all(tests.data.map(async (element) => {
+            await Promise.all(element.pools.map(async (pool)=>{
                 console.log("checking for pool "+pool)
                 //make api call for the given pool to get the well
                 let res = await axios.get(`/api/pools/${pool}`)
                 console.log("well that this pool got :")
                 console.log(res.data)
-                console.log("pool "+pool +" has well "+res.data.well_id)
 
 
                 //with the well we got, find the well and get result
@@ -46,10 +45,10 @@ const EmployeeResult = () =>{
                 console.log(finalResult)
                 element.result = finalResult ? finalResult:"Not assigned"
 
-            })
-        });
+            }))
+        }));
 
-
+        console.log(tests.data)
         setTest(tests.data)
 
 
