@@ -4,6 +4,8 @@ const router = express.Router()
 const Test = require('../../models/Test')
 const Employee = require('../../models/Employee')
 
+import {InvalidTestBarcodeError, InvalidEmployeeIDError} from '../../errors'
+
 //@route    GET api/tests
 //@desc     Get All Tests In Test
 router.get('/', (req, res) => {
@@ -21,18 +23,16 @@ router.get('/:id', (req, res) => {
 
 //@route    POST api/tests
 //@desc     Add test to Test
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
     Test.findById(req.body._id)
         .then((test) => {
-            if (test != null) throw new Error('InvalidTestBarcodeError', 
-                'A Test with the given barcode already exists')
+            if (test != null) throw new InvalidTestBarcodeError('A Test with the given barcode already exists', 404)
         })
         .then(() => {
             return Employee.findById(req.body.employeeID)
         })
         .then((employee) => {
-            if (employee === null) throw new Error('InvalidEmployeeIDError', 
-            'An Employee with the given ID does not exist') 
+            if (employee === null) throw new InvalidEmployeeIDError('An Employee with the given ID does not exist', 404)
         })
         .then(() => {
             const newTest = new Test({

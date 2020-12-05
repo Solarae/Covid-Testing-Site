@@ -1,6 +1,6 @@
 export class InvalidTestBarcodeError extends Error {
-    constructor(...params) {
-      super(...params)
+    constructor(message, status) {
+      super(message)
   
       if (Error.captureStackTrace) {
         Error.captureStackTrace(this, InvalidTestBarcodeError)
@@ -13,8 +13,8 @@ export class InvalidTestBarcodeError extends Error {
   }
 
 export class InvalidEmployeeIDError extends Error {
-    constructor(...params) {
-        super(...params)
+    constructor(message, status) {
+        super(message)
         
         if (Error.captureStackTrace) {
         Error.captureStackTrace(this, InvalidEmployeeIDError)

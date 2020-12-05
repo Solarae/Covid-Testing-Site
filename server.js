@@ -55,15 +55,6 @@ app.use(
 );
 
 
-// Error Middleware
-app.use((err, req, res, next) => {
-  res.status(err.status || 500).json({
-      status: err.status,
-      message: error.message,
-      type: err.type
-  })
-})
-
 const router=require('./routes/api')
 app.use('/api',router);
 
@@ -77,6 +68,18 @@ app.use('/api/labEmployees', labEmployees)
 app.use('/api/pools', pools)
 app.use('/api/tests', tests)
 app.use('/api/wells', wells)
+
+// Error Middleware
+app.use((err, req, res, next) => {
+  console.log("AT MIDDLEWARE")
+  console.log(err.name)
+  res.status(err.status || 500).json({
+      status: err.status,
+      message: err.message,
+      type: err.name
+  })
+})
+
 const PORT =  process.env.PORT || 5000
 
 app.listen(
