@@ -4,7 +4,7 @@ const router = express.Router()
 const Test = require('../../models/Test')
 const Employee = require('../../models/Employee')
 
-const {InvalidTestBarcodeError, InvalidEmployeeIDError} = require('../../errors')
+const { InvalidTestBarcodeError, InvalidEmployeeIDError } = require('../../errors')
 
 //@route    GET api/tests
 //@desc     Get All Tests In Test

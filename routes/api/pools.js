@@ -4,6 +4,8 @@ const router = express.Router()
 const Pool = require('../../models/Pool')
 const Test = require('../../models/Test')
 
+const { InvalidPoolBarcodeError } = require('../../errors')
+
 //@route    GET api/pools
 //@desc     Get All pools In Pool
 router.get('/', (req, res) => {
@@ -15,7 +17,7 @@ router.get('/', (req, res) => {
 //@desc     Add pool to Pool
 router.post('/', (req, res, next) => {
     Pool.findById(req.body._id)
-        .then(pool => { if (pool != null) throw new Error(`Pool with barcode ${req.body._id} already exists`)})
+        .then(pool => { if (pool != null) throw new InvalidPoolBarcodeError(`A pool with the entered barcode already exists`, 404)})
         .then(() => {
             const newPool = new Pool({
                 _id: req.body._id,
@@ -48,7 +50,7 @@ router.patch('/:id', (req, res, next) => {
     Pool.findById(req.body._id)
         .then(pool => {
             if (pool !== null && req.params.id !== req.body._id) {
-                throw new Error('Invalid Pool Barcode')
+                throw new InvalidPoolBarcodeError('A pool with the entered barcode already exists', 404)
             } else {
                 if (req.params.id !== req.body._id) {
                     Pool.findById(req.params.id)
