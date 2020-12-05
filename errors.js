@@ -1,4 +1,4 @@
-export class InvalidTestBarcodeError extends Error {
+class InvalidTestBarcodeError extends Error {
     constructor(message, status) {
       super(message)
   
@@ -12,7 +12,7 @@ export class InvalidTestBarcodeError extends Error {
     }
   }
 
-export class InvalidEmployeeIDError extends Error {
+class InvalidEmployeeIDError extends Error {
     constructor(message, status) {
         super(message)
         
@@ -25,3 +25,5 @@ export class InvalidEmployeeIDError extends Error {
 
     }
   }
+
+module.exports = { InvalidEmployeeIDError, InvalidTestBarcodeError }
