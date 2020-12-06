@@ -44,7 +44,14 @@ const EmployeeResult = () =>{
                     let well = await axios.get(`/api/wells/${res.data.well_id}`)
                     let finalResult = well.data ? well.data.result:null
                     console.log(finalResult)
-                    element.result = finalResult ? finalResult:"Not assigned"
+
+
+                    //if result is already negative, always assign negative
+                    //if the well result is positive , just set positive
+                    if(element.result === "negative" || finalResult === "negative") element.result = "negative" ;
+                    else element.result = finalResult ? finalResult:"Not assigned";
+
+
                 }else console.log("No well is found")
         
 
