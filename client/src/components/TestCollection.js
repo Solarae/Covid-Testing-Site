@@ -32,7 +32,7 @@ class TestCollection extends Component {
     addTest = (e) => {
         e.preventDefault()
         const newTest = {
-            testBarcode: this.state.testBarcode,
+            _id: this.state.testBarcode,
             employeeID: this.state.employeeID,
             collectionTime: Date.now()
         }

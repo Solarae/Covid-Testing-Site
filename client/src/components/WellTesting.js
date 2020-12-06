@@ -43,6 +43,9 @@ const WellTesting = () =>{
 
     const submitForm = async (e) =>{
         e.preventDefault()
+
+        //POST a new well
+
         await axios.post("/api/wells",{
             _id:wellBarcode,
             pool_id:poolBarcode,
@@ -52,6 +55,14 @@ const WellTesting = () =>{
 
         },{withCredentials:true});
         
+
+        //Update the Well ID from Pool 
+
+        await axios.put(`/api/pools/${poolBarcode}`,{
+            _id:poolBarcode,
+            well_id:wellBarcode,
+        })
+
         window.location.reload();
 
     }
@@ -74,7 +85,14 @@ const WellTesting = () =>{
 
 
     const handleDelete =  () =>{
+        //Delete Well
         axios.delete(`/api/wells/${selected[0]}`);
+
+        //Delete Pool connection to Well
+        axios.put(`/api/pools/deleteWell/${selected[1]}`);
+
+
+
         window.location.reload();
 
     }
