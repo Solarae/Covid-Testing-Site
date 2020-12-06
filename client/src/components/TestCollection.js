@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../css/TestCollection.css';
 import axios from 'axios';
 import { Spinner, Container, Row, Table, Form, FormGroup, FormText, Label, Input, Button } from 'reactstrap';
 
@@ -38,7 +39,9 @@ class TestCollection extends Component {
         axios.post('/api/tests', newTest).then(res =>
             { 
                 this.setState( {
-                    tests: [...this.state.tests, res.data]
+                    tests: [...this.state.tests, res.data],
+                    employeeID: '',
+                    testBarcode: ''
                 } )
             })
             .catch(error => {
@@ -127,6 +130,7 @@ class TestCollection extends Component {
                 <Row className="row justify-content-center">
                     <h1>Test Collection</h1>
                 </Row>
+                <div className='form'>
                 <Form onSubmit = {this.addTest}>
                     <Row>
                         <FormGroup>
@@ -145,9 +149,12 @@ class TestCollection extends Component {
                         </FormGroup>
                     </Row>
                     <Row>
+                        <div className='text-center'>
                         <Button>Add</Button>  
+                        </div>
                     </Row>
                 </Form>
+                </div>
                 <div>
                     <Table bordered className="text-center">
                         <thead><tr>{this.renderTableHeader()}</tr></thead>
