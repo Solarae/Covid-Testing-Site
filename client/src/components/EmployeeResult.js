@@ -36,14 +36,17 @@ const EmployeeResult = () =>{
                 //make api call for the given pool to get the well
                 let res = await axios.get(`/api/pools/${pool}`)
                 console.log("well that this pool got :")
-                console.log(res.data)
 
 
-                //with the well we got, find the well and get result
-                let well = await axios.get(`/api/wells/${res.data.well_id}`)
-                let finalResult = well.data ? well.data.result:null
-                console.log(finalResult)
-                element.result = finalResult ? finalResult:"Not assigned"
+                if(res.data){
+                    console.log(res.data)
+                    //with the well we got, find the well and get result
+                    let well = await axios.get(`/api/wells/${res.data.well_id}`)
+                    let finalResult = well.data ? well.data.result:null
+                    console.log(finalResult)
+                    element.result = finalResult ? finalResult:"Not assigned"
+                }else console.log("No well is found")
+        
 
             }))
         }));
