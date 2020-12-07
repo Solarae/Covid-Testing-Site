@@ -16,3 +16,8 @@ Form {
 .form-text {
   color: red;
 }
+
+div.testBarcodeList {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

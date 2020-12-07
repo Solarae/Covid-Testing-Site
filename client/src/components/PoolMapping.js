@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Spinner, Container, ListGroup, ListGroupItem, Row, Table, Form, FormGroup, FormText, Label, Input, Button } from 'reactstrap';
+import { Spinner, Container, ListGroup, ListGroupItem, Table, Form, FormGroup, FormText, Label, Input, Button } from 'reactstrap';
 
 class PoolMapping extends Component {
     state = {
@@ -184,22 +184,20 @@ class PoolMapping extends Component {
         }
         return (
             <Container>
-                <Row className="row justify-content-center">
-                    <h1>PoolMapping</h1>
-                </Row>
+                <div className="text-center">
+                    <h1>Pool Mapping</h1>
+                </div>
+                <div className="form">
                 <Form>
-                    <Row>
-                        <FormGroup>
-                            <Label>Pool Barcode:</Label>
-                            <Input type="text" value = {this.state.poolBarcode} 
-                                    onChange={(e) => this.setState({ poolBarcode: e.target.value })} />
-                            {this.state.invalidPoolBarcodeError != null && <FormText>{this.state.invalidPoolBarcodeError}</FormText>}
-                        </FormGroup>
-                    </Row>
-                    <Row>
-                        <Label>Test Barcodes:</Label>
-                    </Row>
-                    <Row>
+                    <div className="text-left">
+                    <FormGroup>
+                        <Label>Pool Barcode:</Label>
+                        <Input type="text" value = {this.state.poolBarcode} 
+                                onChange={(e) => this.setState({ poolBarcode: e.target.value })} />
+                        {this.state.invalidPoolBarcodeError != null && <FormText>{this.state.invalidPoolBarcodeError}</FormText>}
+                    </FormGroup>
+                    <Label>Test Barcodes:</Label>
+                    <div className='testBarcodeList'>
                     <ListGroup>
                             {this.state.poolTestBarcodes.map((testBarcode, index) => (
                         <ListGroupItem key={index}>
@@ -209,30 +207,32 @@ class PoolMapping extends Component {
                         </ListGroupItem>
                     ))}
                     </ListGroup>
-                    </Row>
-                    <Row>
+                    </div>
                     <FormGroup>
                         <Label>Test to Add:</Label>
                             <Input type="text" value = {this.state.testToAdd} 
                                     onChange={(e) => this.setState({ testToAdd: e.target.value })} />
-                        <Button onClick = {() => this.toAdd(this.state.testToAdd)}>Add Row</Button>
                         {this.state.invalidTestBarcodeError != null && <FormText>{this.state.invalidTestBarcodeError}</FormText>}
                     </FormGroup>
-                    </Row>
-                    <Row>
-                        <Button onClick={() => this.submitPool()}>Submit Pool</Button>  
-                    </Row>
+                    </div>
+                    <div className="text-center">
+                        <Button onClick = {() => this.toAdd(this.state.testToAdd)}>Add Row</Button>
+                    </div>
+                    <div className="text-center">
+                    <Button onClick={() => this.submitPool()}>Submit Pool</Button>  
+                    </div>
                 </Form>
+                </div>
                 <div>
                     <Table bordered className="text-center">
                         <thead><tr>{this.renderTableHeader()}</tr></thead>
                         <tbody>{this.renderTableData()}</tbody>
                     </Table>
                 </div>
-                <Row>
+                <div className="text-center">
                     <Button onClick={this.editPoolClick}>Edit Pool</Button>
                     <Button onClick={this.deletePoolClick}>Delete Pool</Button>
-                </Row>
+                </div>
                 {this.state.deletePoolError != null && <div className="text-center"><p>{this.state.deletePoolError}</p></div> }
                 {this.state.editPoolError != null && <div className="text-center"><p>{this.state.editPoolError}</p></div> }     
             </Container>
