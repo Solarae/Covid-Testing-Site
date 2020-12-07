@@ -11,7 +11,8 @@ const WellTesting = () =>{
     const [data,setData] = useState([]);
     const[result,setResult] = useState("inprogress");
 
-
+    const [poolError,setPoolError] = useState("")
+    const [wellError,setWellError] = useState("")
     const [modal, setModal] = useState(false);
   
     const toggle = () => {
@@ -44,26 +45,64 @@ const WellTesting = () =>{
     const submitForm = async (e) =>{
         e.preventDefault()
 
+
+        setWellError("")
+        setPoolError("")
+
+
         //POST a new well
 
-        await axios.post("/api/wells",{
-            _id:wellBarcode,
-            pool_id:poolBarcode,
-            testingStartTime:new Date(),
-            result:result,
+
+        //get pool
+
+        let pool = await  axios.get(`/api/pools/${poolBarcode}`)
+
+        let well = await  axios.get(`/api/wells`)
+
+        if(well.data){
+
+            well.data.forEach(element => {
+                if(element._id === wellBarcode) {
+                    setWellError("Error! This well has already been used!")
+                }
+            });
+
+        }
 
 
-        },{withCredentials:true});
-        
 
-        //Update the Well ID from Pool 
 
-        await axios.put(`/api/pools/${poolBarcode}`,{
-            _id:poolBarcode,
-            well_id:wellBarcode,
-        })
+        if(pool.data && wellError=== "" && poolError === "" ){
+            console.log(pool)
+            await axios.post("/api/wells",{
+                _id:wellBarcode,
+                pool_id:poolBarcode,
+                testingStartTime:new Date(),
+                result:result,
+    
+    
+            },{withCredentials:true});
+            
+    
+            //Update the Well ID from Pool 
+    
+            await axios.put(`/api/pools/${poolBarcode}`,{
+                _id:poolBarcode,
+                well_id:wellBarcode,
+            })
 
-        window.location.reload();
+            window.location.reload();
+        }
+
+        else{
+            console.log(pool.data)
+            if(!pool.data) setPoolError("Error! This pool doesn't exist!")
+        }
+
+
+
+       
+
 
     }
 
@@ -119,6 +158,8 @@ const WellTesting = () =>{
                         </FormGroup>
                     </Row>
 
+                    {wellError != null && <div className="text-center"><p>{wellError}</p></div> }
+
                     <Row>
                         <FormGroup>
                             <Label>Pool Barcode:</Label>
@@ -126,6 +167,9 @@ const WellTesting = () =>{
                                     onChange={(e) => setPoolBarcode(e.target.value)} />
                         </FormGroup>
                     </Row>
+
+
+                    {poolError != null && <div className="text-center"><p>{poolError}</p></div> }
 
 
                     <Row>
