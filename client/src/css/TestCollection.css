@@ -13,6 +13,6 @@ Form {
   display: inline-block;
 }
 
-FormText {
+.form-text {
   color: red;
 }

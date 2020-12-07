@@ -1,0 +1,23 @@
+Button {
+  margin: 10px;
+  display: block;
+}
+
+div.form {
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+}
+
+Form {
+  display: inline-block;
+}
+
+.form-text {
+  color: red;
+}
+
+div.testBarcodeList {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
