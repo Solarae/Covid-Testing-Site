@@ -68,6 +68,7 @@ router.patch('/:id', (req, res, next) => {
                                     testBarcodes: req.body.testBarcodes,
                                     well_id: req.body.well_id
                                 })
+
                                 return newPool.save()
                             })
                         .then((pool) => res.json(pool))
@@ -105,4 +106,28 @@ router.patch('/:id', (req, res, next) => {
             .catch(next)
         })
                                 
+
+//@route    GET api/pools/:id
+//@desc     Get pool based on ID
+router.get('/:id', (req, res) => {
+    Pool.findById(req.params.id)
+        .then(pools => res.json(pools) )
+})
+
+
+//@route    PUT api/pools/:id
+//@desc     UPDATE pool based on ID
+router.put('/:id', (req, res) => {
+    Pool.updateOne({_id:req.params.id} , {$set:{well_id:req.body.well_id}})
+        .then(pools => res.json(pools) )
+})
+
+
+//@route    PUT api/pools/deleteWell/:id
+//@desc     Delete the well connection based on ID
+router.put('/deleteWell/:id', (req, res) => {
+    Pool.updateOne({_id:req.params.id} , {$set:{well_id:null}})
+        .then(pools => res.json(pools) )
+})
+                
 module.exports = router

@@ -32,7 +32,7 @@ class TestCollection extends Component {
     addTest = (e) => {
         e.preventDefault()
         const newTest = {
-            testBarcode: this.state.testBarcode,
+            _id: this.state.testBarcode,
             employeeID: this.state.employeeID,
             collectionTime: Date.now()
         }
@@ -132,27 +132,23 @@ class TestCollection extends Component {
                 </Row>
                 <div className='form'>
                 <Form onSubmit = {this.addTest}>
-                    <Row>
-                        <FormGroup>
-                            <Label>Employee ID:</Label>
-                            <Input type="text" value = {this.state.employeeID} 
-                                    onChange={(e) => this.setState({ employeeID: e.target.value })} />
-                            {this.state.employeeIDError != null && <FormText>{this.state.employeeIDError}</FormText>}
-                        </FormGroup>
-                    </Row>
-                    <Row>
-                        <FormGroup>
-                            <Label>Test Barcode:</Label>
-                            <Input type="text" value = {this.state.testBarcode} 
-                                onChange={(e) => this.setState({ testBarcode: e.target.value })} />
-                            {this.state.testBarcodeError != null && <FormText>{this.state.testBarcodeError}</FormText>}
-                        </FormGroup>
-                    </Row>
-                    <Row>
-                        <div className='text-center'>
-                        <Button>Add</Button>  
-                        </div>
-                    </Row>
+                    <div className='text-left'>
+                    <FormGroup>
+                        <Label>Employee ID:</Label>
+                        <Input type="text" value = {this.state.employeeID} 
+                                onChange={(e) => this.setState({ employeeID: e.target.value })} />
+                        {this.state.employeeIDError != null && <FormText>{this.state.employeeIDError}</FormText>}
+                    </FormGroup>
+                    <FormGroup>
+                        <Label>Test Barcode:</Label>
+                        <Input type="text" value = {this.state.testBarcode} 
+                            onChange={(e) => this.setState({ testBarcode: e.target.value })} />
+                        {this.state.testBarcodeError != null && <FormText>{this.state.testBarcodeError}</FormText>}
+                    </FormGroup>
+                    </div>
+                    <div className='text-center'>
+                    <Button>Add</Button>  
+                    </div>
                 </Form>
                 </div>
                 <div>

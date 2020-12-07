@@ -56,10 +56,11 @@ router.delete('/:id', (req, res) => {
 
 //@route    GET api/tests/:employeeID
 //@desc     Get All Tests from some employee
-router.get('/:employeeID', async (req, res) => {
+router.get('/getTests/:employeeID', async (req, res) => {
+    console.log(req.params.employeeID)
     let result = await Test.find({employeeID:req.params.employeeID});
 
-    console.log(result);
+    console.log("rtedhdrt"+result);
 
 
     res.send(result);

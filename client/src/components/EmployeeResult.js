@@ -5,7 +5,7 @@ import { Table } from 'reactstrap';
 const EmployeeResult = () =>{
 
     const [test,setTest] = useState([]);
-    const [user,setUser] = useState("");
+    const [user,setUser] = useState({});
 
 
     useEffect(() =>{
@@ -23,9 +23,45 @@ const EmployeeResult = () =>{
 
 
         //get all the tests in which this employee has
-        let tests = await axios.get("api/tests/113222636",{withCredentials:true})
-        setTest(tests.data)
+        console.log(user)
+        let tests = await axios.get(`/api/tests/getTests/${userInfo.data._id}`,{withCredentials:true})
+        // if (tests.data) setTest(tests.data)
+
+        console.log(tests)
+
+        //for each test, find the pools they are in and for each pools,find the well and get result
+        await Promise.all(tests.data.map(async (element) => {
+            await Promise.all(element.pools.map(async (pool)=>{
+                console.log("checking for pool "+pool)
+                //make api call for the given pool to get the well
+                let res = await axios.get(`/api/pools/${pool}`)
+                console.log("well that this pool got :")
+
+
+                if(res.data){
+                    console.log(res.data)
+                    //with the well we got, find the well and get result
+                    let well = await axios.get(`/api/wells/${res.data.well_id}`)
+                    let finalResult = well.data ? well.data.result:null
+                    console.log(finalResult)
+
+
+                    //if result is already negative, always assign negative
+                    //if the well result is positive , just set positive
+                    if(element.result === "negative" || finalResult === "negative") element.result = "negative" ;
+                    else element.result = finalResult ? finalResult:"Not assigned";
+
+
+                }else console.log("No well is found")
+        
+
+            }))
+        }));
+
         console.log(tests.data)
+        setTest(tests.data)
+
+
     }
 
 
