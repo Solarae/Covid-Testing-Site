@@ -6,8 +6,13 @@ Button {
 div.form {
   display: block;
   text-align: center;
+  margin: 0 auto;
 }
 
 Form {
   display: inline-block;
+}
+
+FormText {
+  color: red;
 }
