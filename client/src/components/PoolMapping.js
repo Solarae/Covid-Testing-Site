@@ -164,7 +164,6 @@ class PoolMapping extends Component {
 
     renderTableData() {
         return this.state.pools.map((pool) => {
-            console.log(pool)
            return (
               <tr key={pool._id}>
                   <td>

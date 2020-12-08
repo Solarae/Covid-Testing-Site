@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 //@desc     Add an labEmployee to LabEmployee
 router.post('/', (req, res) => {
     const newLabEmployee = new LabEmployee({
-        _id: req.body.employeeID,
+        _id: req.body._id,
         password: req.body.password
     })
     newLabEmployee.save().then(labEmployee => res.json(labEmployee))

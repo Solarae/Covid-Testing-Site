@@ -59,26 +59,33 @@ const WellTesting = () =>{
         //POST a new well
 
 
-        //get pool
+        //Get the Pool
 
         let pool = await  axios.get(`/api/pools/${poolBarcode}`)
 
         let well = await  axios.get(`/api/wells`)
 
-        if(well.data){
-
-            well.data.forEach(element => {
-                if(element._id === wellBarcode) {
-                    setWellError("Error! This well has already been used!")
-                }
-            });
-
-        }
-
-
-
-
-        if(pool.data && wellError === "" && poolError === "" ){
+        // Check if wellBarcode was used
+        let usedWellBarcode = well.data.find(element => element._id === wellBarcode);
+        
+        // Pool Barcode doesn't exist && Well Barcode is used
+        if (pool.data === null && usedWellBarcode !== null) {
+            setPoolError("A Pool with the given barcode doesn't exist")
+            setWellError("A Well with the given barcode already exists")
+        // Pool Barcode doesn't exist 
+        } else if (pool.data === null) {
+            setPoolError("A Pool with the given barcode doesn't exist")
+        // Pool Barcode does exist, but it is already assigned && Well Barcode is used
+        } else if (pool.data.well_id !== null && usedWellBarcode !== null) {
+            setPoolError("A Pool with the given barcode is already assigned to a Well")
+            setWellError("A Well with the given barcode already exists")
+        // Pool Barcode does exist, but it is already assigned
+        } else if (pool.data.well_id !== null) {
+            setPoolError("A Pool with the given barcode is already assigned to a Well")
+        // Well Barcode is used
+        } else if (usedWellBarcode !== null) {
+            setWellError("A Well with the given barcode already exists")
+        } else {
             console.log(pool)
             await axios.post("/api/wells",{
                 _id:wellBarcode,
@@ -96,20 +103,7 @@ const WellTesting = () =>{
                 _id:poolBarcode,
                 well_id:wellBarcode,
             })
-
-            window.location.reload();
         }
-
-        else{
-            console.log(pool.data)
-            if(!pool.data) setPoolError("Error! This pool doesn't exist!")
-        }
-
-
-
-       
-
-
     }
 
 
