@@ -66,7 +66,16 @@ const WellTesting = () =>{
         let well = await  axios.get(`/api/wells`)
 
         // Check if wellBarcode was used
-        let usedWellBarcode = well.data.find(element => element._id === wellBarcode);
+        let usedWellBarcode = false;
+
+
+        well.data.forEach(element => {
+            if(element._id === wellBarcode) {
+                usedWellBarcode = true
+            }
+        });
+
+        console.log(usedWellBarcode)
         
         // Pool Barcode doesn't exist && Well Barcode is used
         if (pool.data === null && usedWellBarcode !== null) {
@@ -83,7 +92,8 @@ const WellTesting = () =>{
         } else if (pool.data.well_id !== null) {
             setPoolError("A Pool with the given barcode is already assigned to a Well")
         // Well Barcode is used
-        } else if (usedWellBarcode !== null) {
+        } else if (usedWellBarcode) {
+            console.log(usedWellBarcode)
             setWellError("A Well with the given barcode already exists")
         } else {
             console.log(pool)
@@ -103,6 +113,9 @@ const WellTesting = () =>{
                 _id:poolBarcode,
                 well_id:wellBarcode,
             })
+
+            window.location.reload()
+
         }
     }
 
