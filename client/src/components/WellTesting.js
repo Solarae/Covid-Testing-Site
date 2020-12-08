@@ -78,14 +78,14 @@ const WellTesting = () =>{
         console.log(usedWellBarcode)
         
         // Pool Barcode doesn't exist && Well Barcode is used
-        if (pool.data === null && usedWellBarcode !== null) {
+        if (pool.data === null && usedWellBarcode) {
             setPoolError("A Pool with the given barcode doesn't exist")
             setWellError("A Well with the given barcode already exists")
         // Pool Barcode doesn't exist 
         } else if (pool.data === null) {
             setPoolError("A Pool with the given barcode doesn't exist")
         // Pool Barcode does exist, but it is already assigned && Well Barcode is used
-        } else if (pool.data.well_id !== null && usedWellBarcode !== null) {
+        } else if (pool.data.well_id !== null && usedWellBarcode ) {
             setPoolError("A Pool with the given barcode is already assigned to a Well")
             setWellError("A Well with the given barcode already exists")
         // Pool Barcode does exist, but it is already assigned
