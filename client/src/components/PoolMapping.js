@@ -196,9 +196,7 @@ class PoolMapping extends Component {
                 </div>
             ) 
         }
-
-
-
+        
         return (
             <Container>
                 <div className="text-center">

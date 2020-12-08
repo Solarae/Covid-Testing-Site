@@ -212,12 +212,12 @@ const WellTesting = () =>{
                 </div>
 
 
-               <Table>
+               <Table bordered className="text-center">
                     <thead>
                         <tr>
 
-                            <th>Well barcode</th>
-                            <th>Pool barcode</th>
+                            <th>Well Barcode</th>
+                            <th>Pool Barcode</th>
                             <th>Result</th>
                         </tr>
                     </thead>
@@ -227,7 +227,7 @@ const WellTesting = () =>{
 
                             <>
                                 <tr key={element._id}>
-                                    <td><Input type="radio" id={element._id} onChange={(e)=> setSelected([e.target.id,e.target.getAttribute('poolBarcode')])} name="radioButton"  poolbarcode={element.pool_id}    />{element._id}</td>
+                                    <td><Input type="radio" id={element._id} onChange={(e)=> setSelected([e.target.id,e.target.getAttribute('poolBarcode')])} name="radioButton"  poolbarcode={element.pool_id}    />{' '}{element._id}</td>
                                     <td>{element.pool_id}</td>
                                     <td>{element.result}</td>
                                 </tr>

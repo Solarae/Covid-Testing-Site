@@ -1,6 +1,6 @@
 import React , {useState,useEffect} from 'react';
 import axios from 'axios'
-import { Table } from 'reactstrap';
+import { Table, Container } from 'reactstrap';
 import '../css/EmployeeResult.css'
 import {Link} from "react-router-dom";
 const EmployeeResult = () =>{
@@ -84,12 +84,12 @@ const EmployeeResult = () =>{
 
 
     return(
-        <>
-            <div className="row justify-content-center">
+        <Container>
+             <div className="row justify-content-center">
                 <h1>Welcome to employee result page ! </h1>
             </div>
 
-            <Table>
+            <Table bordered className='text-center'>
                 <thead>
                     <tr>
                         <th>Collection Date</th>
@@ -111,8 +111,9 @@ const EmployeeResult = () =>{
 
             </Table>
 
+        </Container>
+           
 
-        </>
     )
 }
 

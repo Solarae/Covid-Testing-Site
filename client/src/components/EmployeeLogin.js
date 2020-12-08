@@ -1,5 +1,5 @@
 import React , {useState} from 'react';
-import { Button , Form } from 'react-bootstrap';
+import { Button , Form, Container } from 'react-bootstrap';
 import '../css/Login.css';
 import axios from 'axios';
 
@@ -46,14 +46,13 @@ const EmployeeLogin = (props) =>{
 
 
     return (
-        <>
-
-
-            <h1>Employee Login Page</h1>
+        <Container className='text-center'>
+           <h1>Employee Login Page</h1>
         
-            <Form onSubmit = {handleSubmit}>
+          <Form onSubmit = {handleSubmit}>
+            <div className='text-left'>
               <Form.Group controlId="formBasicEmail">
-                  <Form.Label>Email email</Form.Label>
+                  <Form.Label>Email</Form.Label>
                   <Form.Control onChange = {e => setEmail(e.target.value) }  type="email" placeholder="Enter email" />
                   <Form.Text >
                   Don't have an account? <Link to="/register">Click here to register! </Link>
@@ -64,11 +63,15 @@ const EmployeeLogin = (props) =>{
                   <Form.Label>Password</Form.Label>
                   <Form.Control onChange = {e => setPassword(e.target.value) } type="password" placeholder="Password" />
               </Form.Group>
+            </div>
+            <div className='text-center'>
               <Button variant="primary" type="submit">
-                  Login Collector
-              </Button>
-            </Form>
-        </>
+                Login Collector
+            </Button>
+            </div>
+          </Form>
+          </Container>
+      
     )
 }
 

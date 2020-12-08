@@ -1,5 +1,5 @@
 import React , {useState} from 'react';
-import { Button , Form } from 'react-bootstrap';
+import { Button , Form, Container } from 'react-bootstrap';
 import '../css/Login.css';
 import axios from 'axios';
 import {useHistory} from "react-router-dom";
@@ -40,30 +40,32 @@ const Login = (props) =>{
 
 
     return (
-        <>
+        <Container className='text-center'>
+          <h1> Lab Technician Login Page</h1>
+          
+          <Form onSubmit = {handleSubmit}>
+            <div className='text-left'>
+            <Form.Group>
+                <Form.Label>Lab Technician ID</Form.Label>
+                <Form.Control onChange = {e => setEmail(e.target.value) } placeholder="Enter ID" />
+                <Form.Text >
+                Don't have an account? <Link to="/register">Click here to register! </Link>
+                </Form.Text>
+            </Form.Group>
 
-
-            <h1> Lab Technician Login Page</h1>
-        
-            <Form onSubmit = {handleSubmit}>
-              <Form.Group>
-                  <Form.Label>Lab Technician ID</Form.Label>
-                  <Form.Control onChange = {e => setEmail(e.target.value) } placeholder="Enter ID" />
-                  <Form.Text >
-                  Don't have an account? <Link to="/register">Click here to register! </Link>
-                  </Form.Text>
-              </Form.Group>
-
-              <Form.Group controlId="formBasicPassword">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control onChange = {e => setPassword(e.target.value) } type="password" placeholder="Password" />
-              </Form.Group>
-
-              <Button variant="primary" type="submit">
-                Lab login
-              </Button>
-            </Form>
-        </>
+            <Form.Group controlId="formBasicPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control onChange = {e => setPassword(e.target.value) } type="password" placeholder="Password" />
+            </Form.Group>
+            </div>
+      
+            <div className='text-center'>
+            <Button variant="primary" type="submit">
+              Lab Login
+            </Button>
+            </div>
+          </Form>
+        </Container>
     )
 }
 
