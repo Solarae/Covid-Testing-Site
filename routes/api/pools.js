@@ -83,9 +83,11 @@ router.patch('/:id', (req, res, next) => {
                                     { $pull: { pools : req.params.id } }
                                         )})
                         .then(() => {
+                                console.log(req.body.deletedTests)
+                                console.log(req.params.id)
                                 return Test.updateMany(
                                     { _id: { $in: req.body.deletedTests } },
-                                    { $pull: { pools : req.params._id } }
+                                    { $pull: { pools : req.params.id } }
                                                 )})
                 } else {
                     Pool.findByIdAndUpdate(req.params.id, {$set: {testBarcodes: req.body.testBarcodes}} )
