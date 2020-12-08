@@ -31,17 +31,22 @@ module.exports = (passport) => {
     
             let user = await Employee.findOne({ email: email });
     
-    
+            //if employee is found
             if(user){
                 if(user.password != password) return done(null,false);
     
                 //console.log("password match for employee")
                 return done(null,user);
             }
-    
+            
+
+            //check if it is a lab employee
             else{
-                let user = await LabEmployee.findOne({_id:email});
-    
+                let user = await LabEmployee.findById(email);
+                
+                console.log(user)
+
+
                 if(user){
                     if(user.password != password) return done(null,false);
         
