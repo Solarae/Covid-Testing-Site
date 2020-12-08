@@ -12,8 +12,17 @@ module.exports = (passport) => {
       passport.deserializeUser(function(id, done) {
         //console.log("deserializing user "+ id)
         Employee.findById(id, function(err, user) {
-            if(err) throw err;
-            done(err, user);
+
+
+            if(user) {done(err, user);}
+
+            else{
+                LabEmployee.findById(id, function(err, user) {
+                    if (user) done(err,user)
+                })
+            }
+        
+
         });
       });
     

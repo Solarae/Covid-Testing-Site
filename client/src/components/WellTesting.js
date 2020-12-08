@@ -1,11 +1,12 @@
 import React ,{useState,useEffect} from 'react';
 import axios from 'axios'
 import { Table,Modal,ModalHeader,ModalBody,ModalFooter, Container, Row, Form, FormGroup, Label, Input, Button} from 'reactstrap';
+import {Link} from "react-router-dom";
 const WellTesting = () =>{
 
     const [poolBarcode,setPoolBarcode] = useState("");
     const [wellBarcode,setWellBarcode] = useState("");
-
+    const [isAuthorized,setAuthorized] = useState(true);
 
     const [selected,setSelected] = useState([]);
     const [data,setData] = useState([]);
@@ -35,6 +36,11 @@ const WellTesting = () =>{
         console.log(results)
 
         if(results.data) setData(results.data)
+
+
+        let user = await axios.get('/api/labemployees/getInfo',{withCredentials:true})
+        console.log(user)
+        if(!user.data) setAuthorized(false)
 
 
     }
@@ -139,8 +145,13 @@ const WellTesting = () =>{
 
 
 
-
-
+    if(!isAuthorized){
+        return(
+            <div className="justify-content-center">
+                <h1>You are not authorized to view this page ! Please <Link to="/labLogin">login as a Lab Employee </Link></h1>
+            </div>
+        ) 
+    }
 
 
     return(

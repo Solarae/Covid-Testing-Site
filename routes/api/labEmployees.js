@@ -47,4 +47,12 @@ router.post("/login", (req, res, next) => {
   });
 
 
+//@route    GET api/labEmployees/getInfo
+//@desc     Get info of logged in user 
+
+router.get("/getInfo" ,(req,res) =>{
+  console.log("got req, " + req.user)
+    res.send(req.user);
+})
+
 module.exports = router

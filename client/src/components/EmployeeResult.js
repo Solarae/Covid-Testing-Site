@@ -2,12 +2,12 @@ import React , {useState,useEffect} from 'react';
 import axios from 'axios'
 import { Table } from 'reactstrap';
 import '../css/EmployeeResult.css'
-
+import {Link} from "react-router-dom";
 const EmployeeResult = () =>{
 
     const [test,setTest] = useState([]);
     const [user,setUser] = useState({});
-
+    const [isAuthorized,setAuthorized] = useState(true);
 
     useEffect(() =>{
         getResults();
@@ -21,6 +21,8 @@ const EmployeeResult = () =>{
         let userInfo = await axios.get("/api/employees/getInfo",{withCredentials:true});
         console.log(userInfo);
         setUser(userInfo.data);
+
+        if(!userInfo.data) setAuthorized(false)
 
 
         //get all the tests in which this employee has
@@ -67,6 +69,13 @@ const EmployeeResult = () =>{
 
 
 
+    if(!isAuthorized){
+        return(
+            <div className="justify-content-center">
+                <h1>You are not authorized to view this page ! Please <Link to="/employeeLogin">login as an Employee </Link></h1>
+            </div>
+        ) 
+    }
 
 
 

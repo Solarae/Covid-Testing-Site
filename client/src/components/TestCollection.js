@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../css/TestCollection.css';
 import axios from 'axios';
 import { Spinner, Container, Row, Table, Form, FormGroup, FormText, Label, Input, Button } from 'reactstrap';
-
+import {Link} from "react-router-dom";
 class TestCollection extends Component {
     state = {
         employeeID: "",
@@ -12,14 +12,15 @@ class TestCollection extends Component {
         selectedTest: null,
         deleteTestError: null,
         employeeIDError: null,
-        testBarcodeError: null
+        testBarcodeError: null,
+        isAuthorized: true,
     }
 
     componentDidMount() {
         this.getTests();
      }
  
-    getTests = () => {
+    getTests = async () => {
          axios.get('/api/tests').then(res =>
              {
                  this.setState( {
@@ -27,6 +28,9 @@ class TestCollection extends Component {
                      tests: res.data
                  } )
              })
+        let user = await axios.get('/api/labemployees/getInfo',{withCredentials:true})
+        console.log(user)
+        if(!user.data) this.setState({isAuthorized:false})
     }
  
     addTest = (e) => {
@@ -119,6 +123,15 @@ class TestCollection extends Component {
      }
 
     render() {
+
+        if(!this.state.isAuthorized){
+            return(
+                <div className="justify-content-center">
+                    <h1>You are not authorized to view this page ! Please <Link to="/labLogin">login as a Lab Employee </Link></h1>
+                </div>
+            ) 
+        }
+
         if (this.state.isLoading) {
             return <div className="d-flex justify-content-center">
                         <strong>Loading...</strong>

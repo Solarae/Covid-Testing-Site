@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Spinner, Container, ListGroup, ListGroupItem, Table, Form, FormGroup, FormText, Label, Input, Button } from 'reactstrap';
-
+import {Link} from "react-router-dom";
 class PoolMapping extends Component {
     state = {
         poolBarcode: "",
@@ -16,14 +16,15 @@ class PoolMapping extends Component {
         invalidPoolBarcodeError: null,
         invalidTestBarcodeError: null,
         deletedTestBarcodes: [],
-        addedTestBarcodes: []
+        addedTestBarcodes: [],
+        isAuthorized:true,
     }
 
     componentDidMount() {
         this.getPools();
      }
  
-    getPools = () => {
+    getPools = async () => {
          axios.get('/api/pools').then(res =>
              {
                  this.setState( {
@@ -31,6 +32,12 @@ class PoolMapping extends Component {
                      pools: res.data
                  } )
              })
+        
+        let user = await axios.get('/api/labemployees/getInfo',{withCredentials:true})
+        console.log(user)
+        if(!user.data) this.setState({isAuthorized:false})
+
+            
      }
  
     submitPool = () => {
@@ -182,6 +189,17 @@ class PoolMapping extends Component {
                         <Spinner color="danger"/>
                     </div>
         }
+
+        if(!this.state.isAuthorized){
+            return(
+                <div className="justify-content-center">
+                    <h1>You are not authorized to view this page ! Please <Link to="/labLogin">login as a Lab Employee </Link></h1>
+                </div>
+            ) 
+        }
+
+
+
         return (
             <Container>
                 <div className="text-center">
