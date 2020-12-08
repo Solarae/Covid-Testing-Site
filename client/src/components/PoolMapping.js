@@ -128,7 +128,7 @@ class PoolMapping extends Component {
     }
 
     toAdd = (testBarcode) => {
-        if (this.state.poolTestBarcodes.find((testBC) => testBC === testBarcode) === undefined) {
+        if (!this.state.poolTestBarcodes.includes(testBarcode)) {
             axios.get(`/api/tests/${testBarcode}`)
             .then((res) => {
                 if (res.data !== null) {
