@@ -72,7 +72,7 @@ const WellTesting = () =>{
 
 
 
-        if(pool.data && wellError=== "" && poolError === "" ){
+        if(pool.data && wellError === "" && poolError === "" ){
             console.log(pool)
             await axios.post("/api/wells",{
                 _id:wellBarcode,
@@ -149,6 +149,7 @@ const WellTesting = () =>{
                 <Row className="row justify-content-center">
                     <h1>Well Testing</h1>
                 </Row>
+                <div className="form">
                 <Form onSubmit = {submitForm}>
                     <Row>
                         <FormGroup>
@@ -186,10 +187,11 @@ const WellTesting = () =>{
 
                     
 
-                    <Row>
+                    <Row className="row justify-content-center">
                         <Button>Add</Button>  
                     </Row>
                 </Form>
+                </div>
 
 
                <Table>
@@ -248,6 +250,7 @@ const WellTesting = () =>{
                             </Row>
 
                         </Form>
+                        
                     </ModalBody>
                     <ModalFooter>
                         <Button color="primary" onClick={submitEdit}>Submit change</Button>{' '}
@@ -257,18 +260,20 @@ const WellTesting = () =>{
                 
 
 
-                <div className="text-center">
+                <div className="row justify-content-center" >
                     <Button variant="primary" onClick={toggle}>
-                        edit
+                        Edit
                     </Button>
-                </div>
+                
 
 
-                <div className="text-center">
+
                     <Button onClick={handleDelete}>
                         Delete
                     </Button>
                 </div>
+                    
+               
 
 
 

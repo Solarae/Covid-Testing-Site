@@ -1,6 +1,7 @@
 import React , {useState,useEffect} from 'react';
 import axios from 'axios'
 import { Table } from 'reactstrap';
+import '../css/EmployeeResult.css'
 
 const EmployeeResult = () =>{
 
@@ -75,9 +76,9 @@ const EmployeeResult = () =>{
 
     return(
         <>
-            <h1>Welcome to employee result</h1>
-
-            <h2>{user._id}</h2>
+            <div className="row justify-content-center">
+                <h1>Welcome to employee result page ! </h1>
+            </div>
 
             <Table>
                 <thead>
