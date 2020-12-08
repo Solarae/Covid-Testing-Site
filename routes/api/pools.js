@@ -83,8 +83,6 @@ router.patch('/:id', (req, res, next) => {
                                     { $pull: { pools : req.params.id } }
                                         )})
                         .then(() => {
-                                console.log(req.body.deletedTests)
-                                console.log(req.params.id)
                                 return Test.updateMany(
                                     { _id: { $in: req.body.deletedTests } },
                                     { $pull: { pools : req.params.id } }
