@@ -114,7 +114,15 @@ const WellTesting = () =>{
                 well_id:wellBarcode,
             })
 
-            window.location.reload()
+
+
+            //update view 
+
+            console.log(data)
+            setData([... data,{_id:wellBarcode ,pool_id:poolBarcode , result:result}])
+
+            console.log(data)
+
 
         }
     }
@@ -131,7 +139,16 @@ const WellTesting = () =>{
         })
 
 
-        window.location.reload();
+        let newData = JSON.parse(JSON.stringify(data))
+
+        let editPool = newData.find(well => well._id === selected[0])
+        editPool.result = result
+
+
+        setData(newData)
+
+        setModal(false)
+
     }
 
 
@@ -145,7 +162,14 @@ const WellTesting = () =>{
 
 
 
-        window.location.reload();
+        //updata view
+
+
+        console.log(data)
+        setData(data.filter(well => well._id !== selected[0]))
+
+        console.log(data)
+
 
     }
 
