@@ -68,7 +68,8 @@ class TestCollection extends Component {
             axios.delete(`/api/tests/${id}`).then(res =>
                 {
                     this.setState( {tests: this.state.tests.filter(test => test._id !== this.state.selectedTest._id),
-                                    deleteTestError: null})
+                                    deleteTestError: null, 
+                                    selectedTest: null})
                 })
             } else {
                 this.setState ({deleteTestError: "Cannot delete a Test that is assigned to a Pool"})
