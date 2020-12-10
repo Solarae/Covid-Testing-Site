@@ -34,31 +34,54 @@ const EmployeeResult = () =>{
 
         //for each test, find the pools they are in and for each pools,find the well and get result
         await Promise.all(tests.data.map(async (element) => {
-            await Promise.all(element.pools.map(async (pool)=>{
-                console.log("checking for pool "+pool)
-                //make api call for the given pool to get the well
-                let res = await axios.get(`/api/pools/${pool}`)
-                console.log("well that this pool got :")
+            console.log(element.collectionTime)
+            let [month,date,year] = new Date(element.collectionTime).toLocaleDateString("en-us").split("/")
+            element.collectionTime = month+"/"+date+"/"+year
+
+            if(element.pools.length === 0 ){
+                element.result = "Not assigned to a pool yet"
+            }
+
+            else{
+                await Promise.all(element.pools.map(async (pool)=>{
+                    console.log("checking for pool "+pool)
+                    //make api call for the given pool to get the well
+                    let res = await axios.get(`/api/pools/${pool}`)
+                    console.log("well that this pool got :")
+    
+    
+                    if(res.data.well_id){
+                        console.log(res.data)
+                        //with the well we got, find the well and get result
+                        let well = await axios.get(`/api/wells/${res.data.well_id}`)
+                        let finalResult = well.data.result
+                        console.log(finalResult)
+    
+    
+                        //if result is already negative, always assign negative
+                        //if the well result is positive , just set positive
+                        if(element.result === "negative" || finalResult === "negative") element.result = "negative" ;
+                        else element.result = finalResult
+
+    
+    
+                    }
+                    
+                    
+                    else {
+                        console.log("No well is found")
+
+                        element.result = "Assigned to a pool, but pool is not assigned to a well";
 
 
-                if(res.data){
-                    console.log(res.data)
-                    //with the well we got, find the well and get result
-                    let well = await axios.get(`/api/wells/${res.data.well_id}`)
-                    let finalResult = well.data ? well.data.result:null
-                    console.log(finalResult)
-
-
-                    //if result is already negative, always assign negative
-                    //if the well result is positive , just set positive
-                    if(element.result === "negative" || finalResult === "negative") element.result = "negative" ;
-                    else element.result = finalResult ? finalResult:"Not assigned";
-
-
-                }else console.log("No well is found")
+                    }
+            
+    
+                }))
+            }
         
 
-            }))
+
         }));
 
         console.log(tests.data)
@@ -86,7 +109,7 @@ const EmployeeResult = () =>{
     return(
         <Container>
              <div className="row justify-content-center">
-                <h1>Welcome to employee result page ! </h1>
+                <h1>Welcome To Employee Result Page ! </h1>
             </div>
 
             <Table bordered className='text-center'>
