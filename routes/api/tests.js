@@ -25,7 +25,7 @@ router.get('/:id', (req, res) => {
 //@desc     Add test to Test
 router.post('/', (req, res, next) => {
     if (req.body._id.length === 0) {
-        throw new InvalidTestBarcodeError('Test Barcode cannot be empty')
+        throw new InvalidTestBarcodeError(`Test Barcode cannot be empty`, 404)
     }
     Test.findById(req.body._id)
         .then((test) => {
