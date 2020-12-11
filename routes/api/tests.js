@@ -24,6 +24,9 @@ router.get('/:id', (req, res) => {
 //@route    POST api/tests
 //@desc     Add test to Test
 router.post('/', (req, res, next) => {
+    if (req.body._id.length === 0) {
+        throw new InvalidTestBarcodeError('Test Barcode cannot be empty')
+    }
     Test.findById(req.body._id)
         .then((test) => {
             if (test != null) throw new InvalidTestBarcodeError('A Test with the given barcode already exists', 404)

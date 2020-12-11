@@ -77,8 +77,10 @@ const WellTesting = () =>{
 
         console.log(usedWellBarcode)
         
+        if (wellBarcode.length === 0) {
+            setWellError("Well Barcode cannot be empty")
         // Pool Barcode doesn't exist && Well Barcode is used
-        if (pool.data === null && usedWellBarcode) {
+        } else if (pool.data === null && usedWellBarcode) {
             setPoolError("A Pool with the given barcode doesn't exist")
             setWellError("A Well with the given barcode already exists")
         // Pool Barcode doesn't exist 
@@ -119,7 +121,7 @@ const WellTesting = () =>{
             //update view 
 
             console.log(data)
-            setData([... data,{_id:wellBarcode ,pool_id:poolBarcode , result:result}])
+            setData([...data,{_id:wellBarcode ,pool_id:poolBarcode , result:result}])
 
             console.log(data)
 

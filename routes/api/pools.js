@@ -16,6 +16,9 @@ router.get('/', (req, res) => {
 //@route    POST api/pools
 //@desc     Add pool to Pool
 router.post('/', (req, res, next) => {
+    if (req.body._id.length === 0) {
+        throw new InvalidPoolBarcodeError('Pool Barcode cannot be empty')
+    }
     Pool.findById(req.body._id)
         .then(pool => { if (pool != null) throw new InvalidPoolBarcodeError(`A pool with the entered barcode already exists`, 404)})
         .then(() => {
