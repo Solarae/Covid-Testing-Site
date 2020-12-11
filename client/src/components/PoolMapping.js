@@ -144,7 +144,8 @@ class PoolMapping extends Component {
                     this.setState ( {
                         poolTestBarcodes: newPoolTestBarcodes,
                         addedTestBarcodes: [...this.state.addedTestBarcodes, testBarcode],
-                        invalidTestBarcodeError: null
+                        invalidTestBarcodeError: null,
+                        testToAdd: ""
                     })     
                 } else {
                     this.setState( { invalidTestBarcodeError: 'Test with the given barcode does not exist' } )
